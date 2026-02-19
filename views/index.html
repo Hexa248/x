@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoStay - Beranda</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body class="app-bg">
+  <nav class="topnav">
+    <a href="/" class="brand">GoStay</a>
+    <div class="topnav-links">
+      <a href="/hotels">Hotel</a>
+      <a href="#rekomendasi">Rekomendasi</a>
+      <a href="/dashboard">Booking Saya</a>
+      <a href="/login">Login</a>
+    </div>
+  </nav>
+
+  <main class="container-xl">
+    <section class="hero-banner">
+      <div class="hero-overlay">
+        <h1>Pesan hotel dan akomodasi untuk perjalananmu</h1>
+        <p>Desain modern, cepat, dan nyaman untuk Android, iOS, tablet, maupun laptop.</p>
+      </div>
+    </section>
+
+    <section class="search-card">
+      <form method="get" action="/" class="search-grid">
+        <label>
+          Kota, tujuan, atau nama hotel
+          <input name="q" value="{{.Query}}" placeholder="Bandung, Bali, Jakarta, ..." />
+        </label>
+        <label>
+          Tanggal Check-in & Check-out
+          <input value="Fleksibel" readonly />
+        </label>
+        <label>
+          Tamu dan Kamar
+          <input value="2 Dewasa, 0 Anak, 1 Kamar" readonly />
+        </label>
+        <button type="submit" class="btn btn-primary">Cari</button>
+      </form>
+    </section>
+
+    <section class="map-section" id="slide-2">
+      <h2>Map kota & hotel tersedia</h2>
+      <div id="cityMap" class="map-box"></div>
+    </section>
+
+    <section id="slide-3">
+      <h2>Destinasi favorit (redesign)</h2>
+      <div class="city-grid">
+        {{range .CityCards}}
+        <a class="city-card" href="/hotels?city={{.Name}}" style="background-image:url('{{.ImageURL}}')">
+          <div class="city-card-overlay">
+            <h3>{{.Name}}</h3>
+            <p>Mulai dari Rp {{.StartFrom}}</p>
+          </div>
+        </a>
+        {{end}}
+      </div>
+    </section>
+
+    <section id="slide-4" class="promo-wrap">
+      <div class="promo-login-card">
+        <div class="promo-top">
+          <h3>Ada penawaran yang kamu mungkin suka!</h3>
+          <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=420&q=80" alt="promo" />
+        </div>
+        <a class="social-btn" href="/auth/google">🔵 Google</a>
+        <button class="social-btn" type="button"> Apple</button>
+        <button class="social-btn" type="button">ⓕ Facebook</button>
+        <p class="muted center">Metode lain</p>
+      </div>
+    </section>
+
+    <section id="rekomendasi">
+      <h2>Rekomendasi untuk kamu</h2>
+      <div class="hotel-grid">
+      {{range .Recommendations}}
+        <article class="hotel-card-v2">
+          <div class="hotel-thumb" style="background-image:url('https://picsum.photos/seed/hotel{{.ID}}/700/350')"></div>
+          <div class="hotel-body">
+            <h3>{{.Name}}</h3>
+            <p>{{.City}} • ⭐ {{printf "%.1f" .Rating}}</p>
+            <p>{{.Description}}</p>
+            <div class="row-btn">
+              <a class="btn btn-light" href="/hotels?city={{.City}}">Pilih Kota</a>
+              <a class="btn btn-primary" href="/hotels/{{.ID}}?city={{.City}}">Lihat Detail</a>
+            </div>
+          </div>
+        </article>
+      {{end}}
+      </div>
+    </section>
+  </main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const hotels=[{{range $i,$h := .Hotels}}{{if $i}},{{end}}{name:"{{$h.Name}}",city:"{{$h.City}}",lat:{{$h.Latitude}},lng:{{$h.Longitude}}}{{end}}];
+const map=L.map('cityMap').setView([-2.5,118],5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(map);
+hotels.forEach(h=>L.marker([h.lat,h.lng]).addTo(map).bindPopup(`<b>${h.city}</b><br/>${h.name}`));
+</script>
+</body>
+</html>

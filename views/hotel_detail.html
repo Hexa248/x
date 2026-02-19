@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></head><body class="app-bg">
+<nav class="topnav"><a href="/" class="brand">GoStay</a><div class="topnav-links"><a href="/hotels?city={{.city}}">Hotel</a><a href="/dashboard">Booking Saya</a><a href="/login">Login</a></div></nav>
+<div class="container-xl">
+<div class="detail-hero">
+  <div class="detail-image" style="background-image:url('https://picsum.photos/seed/detail{{.hotel.ID}}/1200/500')"></div>
+  <div class="detail-info"><h2>{{.hotel.Name}}</h2><p>{{.hotel.Description}}</p><span class="chip">Kota dipilih: {{.hotel.City}}</span><span class="chip">⭐ {{printf "%.1f" .hotel.Rating}}</span></div>
+</div>
+<div class="type-box">
+<h3>Pilih Tipe Kamar (terpisah)</h3>
+<p>Klik tipe kamar untuk menampilkan pilihan kamar berdasarkan kota/hotel yang dipilih.</p>
+<div class="type-choice"><a class="btn btn-light" href="/hotels/{{.hotel.ID}}/rooms?type=VIP&city={{.hotel.City}}">VIP (10 kamar)</a><a class="btn btn-light" href="/hotels/{{.hotel.ID}}/rooms?type=Deluxe&city={{.hotel.City}}">Deluxe (10 kamar)</a><a class="btn btn-light" href="/hotels/{{.hotel.ID}}/rooms?type=Biasa&city={{.hotel.City}}">Biasa (10 kamar)</a></div>
+</div>
+<div class="map-section"><h3>Map lokasi hotel terpilih</h3><div id="hotelMap" class="map-box detail-map"></div></div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const lat={{.hotel.Latitude}}, lng={{.hotel.Longitude}}, name="{{.hotel.Name}}", city="{{.hotel.City}}";
+const map=L.map('hotelMap').setView([lat,lng],12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18}).addTo(map);
+L.marker([lat,lng]).addTo(map).bindPopup(`<b>${name}</b><br/>${city}`).openPopup();
+</script>
+</body></html>

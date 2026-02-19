@@ -1,0 +1,4 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/assets/css/style.css"></head><body class="app-bg">
+<nav class="topnav"><a href="/" class="brand">GoStay</a><div class="topnav-links"><a href="/hotels">Hotel</a><a href="#">Rekomendasi</a><a href="/dashboard">Booking Saya</a><a href="/logout">Logout</a></div></nav>
+<div class="container-xl"><h2>Booking Saya</h2>{{range .bookings}}<div class="hotel-card-compact"><p>#{{.ID}} • status: {{.Status}}</p><p>Total: Rp {{printf "%.0f" .Total}}</p></div>{{else}}<p>Belum ada booking</p>{{end}}</div>
+</body></html>
