@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body class="login-bg">
+  <div class="blur-layer"></div>
+  <main class="login-shell">
+    <section class="login-card">
+      <div class="login-header">
+        <h2>Ada penawaran yang kamu mungkin suka!</h2>
+      </div>
+      {{if .error}}<p class="err">{{.error}}</p>{{end}}
+      <a class="social-btn" href="/auth/google">🔵 Google</a>
+      <button class="social-btn" type="button"> Apple</button>
+      <button class="social-btn" type="button">ⓕ Facebook</button>
+      <p class="muted center">Metode lain</p>
+      <form method="post" action="/login" class="login-form">
+        <input name="email" placeholder="email" required />
+        <input type="password" name="password" placeholder="password" required />
+        <button class="btn btn-primary" type="submit">Masuk</button>
+      </form>
+      <p class="tiny center">Dengan melanjutkan, kamu menyetujui Syarat & Ketentuan dan Pemberitahuan Privasi.</p>
+      <a class="guest-link" href="/">Lihat sebagai tamu</a>
+    </section>
+  </main>
+</body>
+</html>

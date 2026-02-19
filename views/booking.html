@@ -1,0 +1,7 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/assets/css/style.css"></head><body class="app-bg">
+<nav class="topnav"><a href="/" class="brand">GoStay</a><div class="topnav-links"><a href="/hotels?city={{.city}}">Hotel</a><a href="/dashboard">Booking Saya</a><a href="/login">Login</a></div></nav>
+<div class="container-xl">
+<h2>{{.hotel.Name}} — Kamar {{.roomType}}</h2><p>Kota dipilih: {{.hotel.City}}</p>
+<div class="room-grid">{{range .rooms}}
+<div class="room-row-card"><div class="room-photo" style="background-image:url('https://picsum.photos/seed/room{{.ID}}/600/360')"></div><div class="room-main"><div class="room-head"><h4>Kamar {{.Number}}</h4><strong>Rp {{printf "%.0f" .Price}} / malam</strong></div><p>Kasur {{.Beds}} • Kapasitas {{.Capacity}} orang</p><div>{{range .Facilities}}<span class="chip">{{.}}</span>{{end}}</div><img src="{{.MapImage}}" alt="denah"/></div><form method="post" action="/booking" class="room-book"><input type="hidden" name="room_id" value="{{.ID}}"><label>Check in<input type="date"></label><label>Check out<input type="date"></label><label>Malam<input type="number" name="nights" value="1" min="1"></label><button class="btn btn-primary">Pilih Kamar Ini</button></form></div>
+{{end}}</div></div></body></html>

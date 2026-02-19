@@ -1,0 +1,4 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/assets/css/style.css"></head><body class="app-bg">
+<nav class="topnav"><a href="/" class="brand">GoStay</a><div class="topnav-links"><a href="/hotels">Hotel</a><a href="/dashboard">Booking Saya</a><a href="/login">Login</a></div></nav>
+<div class="container-xl"><h2>Daftar Hotel {{if .city}}di {{.city}}{{end}}</h2><div class="hotel-grid compact">{{range .hotels}}<a class="hotel-card-compact" href="/hotels/{{.ID}}?city={{.City}}"><h3>{{.Name}}</h3><p>{{.City}}</p><span class="btn btn-primary">Lihat Detail</span></a>{{end}}</div></div>
+</body></html>

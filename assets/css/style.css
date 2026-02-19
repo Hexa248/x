@@ -1,0 +1,33 @@
+:root{--blue:#0a84e8;--dark:#1b2640;--bg:#e9eef7;--card:#ffffff;--muted:#6b7280}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;color:var(--dark)}
+.app-bg{background:var(--bg)}
+.topnav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:#fff;position:sticky;top:0;z-index:40;border-bottom:1px solid #d8deeb}
+.brand{font-size:44px;font-weight:800;color:#1570e8;text-decoration:none}
+.topnav-links a{margin-left:18px;text-decoration:none;color:#2f3b52;font-weight:700}
+.container-xl{max-width:1400px;margin:0 auto;padding:18px}
+.hero-banner{height:360px;border-radius:26px;background:url('https://images.unsplash.com/photo-1563911302283-d2bc129e7570?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;position:relative;overflow:hidden}
+.hero-overlay{position:absolute;left:24px;right:24px;bottom:22px;background:#11182788;color:#fff;padding:20px;border-radius:18px}
+.search-card{margin:-28px auto 22px;max-width:1320px;background:#fff;border-radius:24px;padding:16px;box-shadow:0 18px 40px #00000012;position:relative}
+.search-grid{display:grid;grid-template-columns:2fr 2fr 2fr 1fr;gap:14px;align-items:end}.search-grid label{font-weight:700;font-size:14px}.search-grid input{margin-top:8px;width:100%;padding:13px;border:1px solid #c8d2e6;border-radius:14px;font-size:20px}
+.btn{display:inline-block;padding:12px 16px;border-radius:12px;text-decoration:none;border:none;cursor:pointer;text-align:center;font-weight:700}.btn-primary{background:linear-gradient(90deg,#0d78e2,#1ca2ea);color:#fff}.btn-light{background:#dfe8f5;color:#123b8f;border:1px solid #9ec0f3}
+.city-grid{display:grid;grid-template-columns:repeat(3,minmax(260px,1fr));gap:14px}.city-card{height:210px;border-radius:18px;background-size:cover;background-position:center;display:block;position:relative;overflow:hidden;text-decoration:none}.city-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,#00000040,#0000007d);color:#fff;padding:20px;font-weight:700}
+.hotel-grid{display:grid;grid-template-columns:repeat(3,minmax(260px,1fr));gap:18px}.hotel-card-v2{background:#f8fafc;border-radius:20px;overflow:hidden;border:1px solid #d7dff0;transition:.22s}.hotel-card-v2:hover{transform:translateY(-8px) scale(1.01)}.hotel-thumb{height:200px;background-size:cover;background-position:center}.hotel-body{padding:16px}.row-btn{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.compact{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.hotel-card-compact{background:#fff;border:1px solid #d4ddf0;border-radius:14px;padding:12px;text-decoration:none;color:inherit}
+.detail-hero{background:#fff;border-radius:24px;overflow:hidden;border:1px solid #d7dff0}.detail-image{height:280px;background-size:cover;background-position:center}.detail-info{padding:18px}
+.type-box{margin-top:14px;background:#fff;border-radius:20px;padding:20px;border:1px solid #d5deef}.type-choice{display:flex;gap:10px;flex-wrap:wrap}
+.room-grid{display:grid;gap:16px}.room-row-card{display:grid;grid-template-columns:1.2fr 1.4fr 1fr;background:#fff;border:1px solid #d3ddef;border-radius:18px;overflow:hidden}.room-photo{min-height:260px;background-size:cover;background-position:center}.room-main{padding:14px}.room-main img{width:100%;border-radius:10px;border:1px solid #d8deeb}.room-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.room-book{padding:14px;border-left:1px solid #d9e0ee;display:flex;flex-direction:column;gap:8px}.room-book input{padding:10px;border-radius:10px;border:1px solid #b7c5de}
+.chip{display:inline-block;background:#e9f1ff;color:#123b8f;border:1px solid #9ec0f3;padding:5px 10px;border-radius:999px;margin:3px 4px 3px 0;font-weight:600}
+.login-bg{min-height:100vh;background:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80') center/cover fixed no-repeat;display:flex;align-items:center;justify-content:center;position:relative}.blur-layer{position:absolute;inset:0;background:#0f172a66;backdrop-filter:blur(8px)}
+.login-shell{position:relative;z-index:2;padding:18px}.login-card{width:min(500px,95vw);background:#fff;border-radius:22px;padding:0 18px 18px;overflow:hidden}.login-header{margin:0 -18px 12px;padding:22px 18px;background:linear-gradient(135deg,#d0f0ee,#c6dcf8)}.login-header h2{margin:0;font-size:40px}.social-btn{width:100%;padding:12px;border:none;border-radius:999px;background:#f4f5f7;margin:7px 0;font-size:18px}.center{text-align:center}.tiny{font-size:13px;color:var(--muted)}.muted{color:var(--muted)}.guest-link{display:block;text-align:center;color:#1386e9;text-decoration:none;font-weight:700;margin-top:8px}.login-form input{width:100%;padding:11px;border:1px solid #cad4e9;border-radius:10px;margin:7px 0}.err{color:#dc2626}
+@media(max-width:900px){.brand{font-size:34px}.topnav{padding:12px}.topnav-links a{margin-left:10px;font-size:14px}.hero-banner{height:280px}.search-grid{grid-template-columns:1fr}.city-grid,.hotel-grid{grid-template-columns:1fr 1fr}.room-row-card{grid-template-columns:1fr}}
+@media(max-width:600px){.container-xl{padding:12px}.topnav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.topnav-links a{margin:0;font-size:13px}.brand{font-size:28px}.city-grid,.hotel-grid{grid-template-columns:1fr}.hero-overlay h1{font-size:22px}.hero-overlay p{font-size:14px}.search-grid input{font-size:16px}.login-header h2{font-size:30px}}
+
+
+.map-section{margin:20px 0;background:#fff;border:1px solid #d4ddf0;border-radius:18px;padding:14px}
+.map-box{height:340px;border-radius:14px;overflow:hidden}
+.detail-map{height:300px}
+.promo-wrap{display:flex;justify-content:center}
+.promo-login-card{width:min(560px,100%);background:#fff;border-radius:26px;padding:0 18px 18px;border:1px solid #d4ddf0;box-shadow:0 18px 34px #00000010}
+.promo-top{display:flex;justify-content:space-between;gap:14px;padding:18px;border-radius:22px;background:linear-gradient(135deg,#d7f0ea,#cee0fa);margin:0 -18px 12px}
+.promo-top img{width:120px;height:90px;object-fit:cover;border-radius:12px}
+@media(max-width:600px){.map-box{height:250px}.detail-map{height:230px}.promo-top{flex-direction:column}.promo-top img{width:100%;height:120px}}
