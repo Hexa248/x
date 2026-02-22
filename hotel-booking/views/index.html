@@ -1,0 +1,52 @@
+{{define "content"}}
+<section class="hero city-hero" id="city-hero" style="background-image:linear-gradient(120deg, rgba(14,77,146,.84), rgba(0,169,255,.75)), url('{{(index .Hotels 0).Image}}')">
+  <div>
+    <h1>Jelajahi Hotel di Kota Ikonik Indonesia</h1>
+    <p>Pilih kota, foto dan map otomatis berubah. Desain modern & responsif untuk HP, tablet, desktop.</p>
+  </div>
+</section>
+
+<section class="search-panel">
+  <div class="field">
+    <label>Kota, tujuan, atau nama hotel</label>
+    <input id="cityInput" value="{{(index .Hotels 0).City}}, Indonesia" readonly>
+  </div>
+  <div class="field">
+    <label>Tanggal Check-in & Check-out</label>
+    <input value="Min, 22 Feb 2026 - Sen, 23 Feb 2026" readonly>
+  </div>
+  <div class="field">
+    <label>Tamu dan Kamar</label>
+    <input value="2 Dewasa, 0 Anak, 1 Kamar" readonly>
+  </div>
+  <button class="btn search-btn">Cari</button>
+</section>
+
+<section class="home-grid">
+  <div class="map-small">
+    <h3>Map Lokasi Hotel</h3>
+    <iframe id="main-city-map" src="{{(index .Hotels 0).MapEmbedURL}}" loading="lazy"></iframe>
+  </div>
+  <div class="comment-box">
+    <h3>Komentar Tamu</h3>
+    <p>⭐ "Pelayanannya cepat, check-in hanya 5 menit."</p>
+    <p>⭐ "Kamar bersih dan map lokasi akurat sesuai kotanya."</p>
+    <p>⭐ "Cocok untuk liburan keluarga dan perjalanan kerja."</p>
+  </div>
+</section>
+
+<h3>Kota Populer Indonesia</h3>
+<section class="city-cards">
+{{range .Hotels}}
+  <article class="city-card" data-city="{{.City}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
+    <img src="{{.Image}}" alt="{{.City}}">
+    <div class="city-overlay">
+      <h4>{{.City}}</h4>
+      <p>Hotel di {{.City}} mulai dari Rp {{printf "%d" .ID}}90.000/malam</p>
+    </div>
+  </article>
+{{end}}
+</section>
+
+<div id="hotel-popup" class="popup hidden"><div class="popup-content"><p id="popup-text"></p><button onclick="closePopup()">Tutup</button></div></div>
+{{end}}

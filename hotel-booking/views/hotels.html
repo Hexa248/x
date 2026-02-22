@@ -1,0 +1,31 @@
+{{define "content"}}
+<h2>Pemilihan Hotel</h2>
+<section class="search-panel compact">
+  <div class="field">
+    <label>Kota, tujuan, atau nama hotel</label>
+    <input id="cityInputHotels" value="{{(index .Hotels 0).City}}, Indonesia" readonly>
+  </div>
+  <div class="field">
+    <label>Tanggal Check-in & Check-out</label>
+    <input value="Min, 22 Feb 2026 - Sen, 23 Feb 2026" readonly>
+  </div>
+  <div class="field">
+    <label>Tamu dan Kamar</label>
+    <input value="2 Dewasa, 0 Anak, 1 Kamar" readonly>
+  </div>
+  <button class="btn search-btn">Cari</button>
+</section>
+
+<div class="cards">
+{{range .Hotels}}
+<article class="hotel-card city-card" data-city="{{.City}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}" data-hotel="{{.Name}}">
+  <img src="{{.Image}}" alt="{{.Name}}">
+  <div class="card-body">
+    <h3>{{.Name}}</h3>
+    <p>{{.Address}}</p>
+    <a class="btn" href="/booking?hotel={{.ID}}">Pilih Tipe Kamar</a>
+  </div>
+</article>
+{{end}}
+</div>
+{{end}}
