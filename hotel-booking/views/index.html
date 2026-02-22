@@ -2,7 +2,7 @@
 <section class="hero city-hero" id="city-hero" style="background-image:linear-gradient(120deg, rgba(14,77,146,.84), rgba(0,169,255,.75)), url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80')">
   <div>
     <h1>Jelajahi Hotel di Kota Ikonik Indonesia</h1>
-    <p>Pilih kota, lalu tampil 5 hotel terbaik di kota tersebut dengan desain modern dan rapi.</p>
+    <p>Pilih kota untuk masuk ke halaman baru pemilihan hotel kota tersebut.</p>
   </div>
 </section>
 
@@ -38,22 +38,14 @@
 <h3>Kota Populer Indonesia</h3>
 <section class="city-cards">
 {{range .Hotels}}
-  <article class="city-card" data-city="{{.City}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
+  <a class="city-card city-link" href="/hotels?city={{.City}}" data-city="{{.City}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
     <img src="{{.Image}}" alt="{{.City}}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/cityfallback/1200/800'">
     <div class="city-overlay">
       <h4>{{.City}}</h4>
       <p>Hotel di {{.City}} mulai dari Rp {{printf "%d" .ID}}90.000/malam</p>
     </div>
-  </article>
+  </a>
 {{end}}
-</section>
-
-<section class="city-hotel-section">
-  <div class="city-hotel-head">
-    <h3 id="cityHotelTitle">Pilih kota untuk melihat hotel</h3>
-    <p id="cityHotelSub">Setelah pilih kota, akan muncul 5 hotel rekomendasi.</p>
-  </div>
-  <div id="cityHotelGrid" class="city-hotel-grid"></div>
 </section>
 
 <div id="hotel-popup" class="popup hidden"><div class="popup-content"><p id="popup-text"></p><button onclick="closePopup()">Tutup</button></div></div>
