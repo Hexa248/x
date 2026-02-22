@@ -1,0 +1,62 @@
+{{define "content"}}
+<section class="search-panel compact">
+  <div class="field">
+    <label>Kota, tujuan, atau nama hotel</label>
+    <input id="cityInputHotels" value="{{if .SelectedCity}}{{.SelectedCity}}, Indonesia{{end}}" placeholder="Pilih kota dari beranda" readonly>
+  </div>
+  <div class="field">
+    <label>Tanggal Check-in & Check-out</label>
+    <input value="Min, 22 Feb 2026 - Sen, 23 Feb 2026" readonly>
+  </div>
+  <div class="field">
+    <label>Tamu dan Kamar</label>
+    <input value="2 Dewasa, 0 Anak, 1 Kamar" readonly>
+  </div>
+  <button class="btn search-btn">Cari</button>
+</section>
+
+<section class="hotel-results-layout">
+  <aside class="filter-sidebar split-scroll-pane split-scroll-left">
+    <div class="filter-card promo-mini"><p><strong>Dapatkan diskon 8%</strong><br/>s.d. Rp100.000!<br/>Gunakan kode "JALANYUK".</p></div>
+    <div class="filter-card"><h4>Ide tanggal menginap</h4><div class="mini-grid"><span>Hari ini</span><span>Besok</span><span>Weekend sel.</span><span>Weekend beri.</span></div></div>
+    <div class="filter-card"><h4>Rentang Harga</h4><div class="price-line"></div><div class="price-chip-row"><span>IDR 0</span><span>IDR 16.000.000</span></div></div>
+    <div class="filter-card"><h4>Promo & Diskon</h4><label><input type="checkbox"> Promo untuk Anda</label><label><input type="checkbox"> Ramadan</label><label><input type="checkbox"> Extra Benefit</label><label><input type="checkbox"> Promo Domestik</label></div>
+    <div class="filter-card"><h4>Bintang</h4><label><input type="checkbox" checked> 1 ⭐</label><label><input type="checkbox" checked> 2 ⭐</label><label><input type="checkbox"> 3 ⭐</label><label><input type="checkbox"> 4 ⭐</label><label><input type="checkbox"> 5 ⭐</label></div>
+    <div class="filter-card"><h4>Rating dari Tamu</h4><label><input type="checkbox"> 7+ Nyaman</label><label><input type="checkbox"> 8+ Mengesankan</label><label><input type="checkbox"> 9+ Luar Biasa</label></div>
+    <div class="filter-card"><h4>Tipe Akomodasi</h4><label><input type="checkbox"> Vila</label><label><input type="checkbox"> Hotel</label><label><input type="checkbox"> Ryokan</label><label><input type="checkbox"> Apartemen</label><label><input type="checkbox"> Guesthouse</label><a href="#">Lihat Semua</a></div>
+    <div class="filter-card"><h4>Fasilitas yang sering dicari</h4><label><input type="checkbox"> Restoran</label><label><input type="checkbox"> Sarapan Tersedia</label><label><input type="checkbox"> Early Check-In</label><label><input type="checkbox"> Antar-jemput Bandara</label><label><input type="checkbox"> Late Check-Out</label><a href="#">Lihat Semua</a></div>
+    <div class="filter-card"><h4>Pembatalan Fleksibel</h4><label><input type="checkbox"> Gratis Pembatalan</label><label><input type="checkbox"> Bayar di Hotel</label></div>
+    <div class="filter-card"><h4>Fasilitas Unik</h4><label><input type="checkbox"> Area Belanja</label><label><input type="checkbox"> Area Hiburan</label><label><input type="checkbox"> Bar</label><label><input type="checkbox"> Lapangan Olahraga</label><label><input type="checkbox"> Indoor Sports</label><a href="#">Lihat Semua</a></div>
+    <div class="filter-card"><h4>Fasilitas Kamar</h4><label><input type="checkbox"> Ruang Bebas Asap Rokok</label><label><input type="checkbox"> AC</label><label><input type="checkbox"> Kulkas</label><label><input type="checkbox"> Dapur</label><label><input type="checkbox"> Ruang Keluarga</label><a href="#">Lihat Semua</a></div>
+    <div class="filter-card"><h4>Pilihan Traveloka</h4><label><input type="checkbox"> Preferred Partner</label><label><input type="checkbox"> Hotel Budget</label></div>
+    <div class="filter-actions"><button class="btn secondary">Reset</button><button class="btn">Terapkan</button></div>
+  </aside>
+
+  <div class="hotel-listing split-scroll-pane split-scroll-right">
+    <div class="city-hotel-head">
+      <div>
+        <h2>{{if .SelectedCity}}Rekomendasi Hotel di {{.SelectedCity}}{{else}}Pemilihan Hotel{{end}}</h2>
+        <p>{{if .SelectedCity}}Menampilkan 5 hotel pilihan terbaik untuk kota {{.SelectedCity}}.{{else}}Pilih kota dari beranda untuk menampilkan hotel per kota.{{end}}</p>
+      </div>
+    </div>
+
+    {{range .Hotels}}
+    <article class="result-card">
+      <img src="{{.Image}}" alt="{{.Name}}">
+      <div class="result-main">
+        <h3>{{.Name}}</h3>
+        <p class="muted">{{.City}} • {{.Address}}</p>
+        <p><span class="pill">Hotel</span> ⭐⭐ Preferred Partner</p>
+        <p class="muted">"Kamar bersih, lokasi strategis, staff ramah, cocok untuk perjalanan bisnis maupun keluarga."</p>
+      </div>
+      <div class="result-side">
+        <p class="score">{{printf "%.1f" .Rating}}</p>
+        <p class="muted">Mengesankan</p>
+        <p class="price">Rp {{printf "%d" .ID}}47.234</p>
+        <a class="btn" href="/booking?hotel={{.ID}}">Pilih Kamar</a>
+      </div>
+    </article>
+    {{end}}
+  </div>
+</section>
+{{end}}
