@@ -1,0 +1,152 @@
+function openTab(id){
+  document.querySelectorAll('.room-tab').forEach(x=>x.classList.add('hidden'));
+  const target=document.getElementById(id);
+  if(target)target.classList.remove('hidden');
+}
+
+function closePopup(){
+  const p=document.getElementById('hotel-popup');
+  if(p)p.classList.add('hidden');
+}
+
+const cards=document.querySelectorAll('.hotel-card');
+cards.forEach(c=>c.addEventListener('click',(e)=>{
+  if(e.target.closest('a')) return;
+  const p=document.getElementById('hotel-popup');
+  if(!p) return;
+  const name=c.dataset.hotel||'hotel pilihanmu';
+  const text=document.getElementById('popup-text');
+  if(text) text.innerText='Kamu memilih '+name;
+  p.classList.remove('hidden');
+}));
+
+const cityCards=document.querySelectorAll('.city-card');
+cityCards.forEach(card=>card.addEventListener('click',()=>{
+  const city=card.dataset.city;
+  const image=card.dataset.image;
+  const map=card.dataset.map;
+  const hero=document.getElementById('city-hero');
+  const mapFrame=document.getElementById('main-city-map');
+  const cityInput=document.getElementById('cityInput');
+  const cityInputHotels=document.getElementById('cityInputHotels');
+  if(hero && image){ hero.style.backgroundImage=`linear-gradient(120deg, rgba(14,77,146,.84), rgba(0,169,255,.75)), url('${image}')`; }
+  if(mapFrame && map){ mapFrame.src=map; }
+  if(cityInput) cityInput.value=`${city}, Indonesia`;
+  renderCityHotels(city);
+  if(cityInputHotels) cityInputHotels.value=`${city}, Indonesia`;
+}));
+
+const sections=document.querySelectorAll('.info-section');
+const tabs=document.querySelectorAll('.tab-anchor');
+if(sections.length && tabs.length){
+  const updateActiveTab=()=>{
+    const sticky=document.querySelector('.sticky-tabs');
+    const headerOffset=(sticky ? sticky.offsetHeight : 0) + 70;
+    const y=window.scrollY + headerOffset;
+
+    let current=sections[0];
+    sections.forEach(sec=>{
+      if(y >= sec.offsetTop){
+        current=sec;
+      }
+    });
+
+    tabs.forEach(t=>t.classList.remove('active'));
+    const active=document.querySelector(`.tab-anchor[href="#${current.id}"]`);
+    if(active) active.classList.add('active');
+  };
+
+  window.addEventListener('scroll', updateActiveTab, {passive:true});
+  window.addEventListener('resize', updateActiveTab);
+  updateActiveTab();
+}
+
+
+const recoCards=document.querySelectorAll('.reco-card');
+const recoLinks=document.querySelectorAll('.reco-link');
+if(recoCards.length && recoLinks.length){
+  const recoObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        recoLinks.forEach(l=>l.classList.remove('active'));
+        const id=entry.target.getAttribute('id');
+        const active=document.querySelector(`.reco-link[href="#${id}"]`);
+        if(active) active.classList.add('active');
+      }
+    });
+  },{threshold:0.45});
+  recoCards.forEach(c=>recoObserver.observe(c));
+}
+
+
+document.body.classList.add('js-animate');
+const animatedEls=document.querySelectorAll('.scroll-animate');
+if(animatedEls.length){
+  const animObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  },{threshold:0.18});
+  animatedEls.forEach(el=>animObserver.observe(el));
+}
+
+
+const cityHotelCatalog={
+  "Jakarta":[
+    {name:"Jakarta Grand Central",rating:"9.0",price:"Rp600000",image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=900&q=80"},
+    {name:"Sudirman Urban Suites",rating:"8.8",price:"Rp520000",image:"https://images.unsplash.com/photo-1455587734955-081b22074882?auto=format&fit=crop&w=900&q=80"},
+    {name:"Menteng Royal Inn",rating:"8.7",price:"Rp470000",image:"https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=900&q=80"},
+    {name:"Kemang Park Hotel",rating:"8.6",price:"Rp450000",image:"https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=900&q=80"},
+    {name:"Ancol Bay Resort",rating:"8.9",price:"Rp580000",image:"https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?auto=format&fit=crop&w=900&q=80"}
+  ],
+  "Bandung":[
+    {name:"Bandung Sky Inn",rating:"8.9",price:"Rp420000",image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=900&q=80"},
+    {name:"Cihampelas Urban Stay",rating:"8.7",price:"Rp390000",image:"https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80"},
+    {name:"Dago Hills Hotel",rating:"8.8",price:"Rp460000",image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=900&q=80"},
+    {name:"Braga Heritage Inn",rating:"8.6",price:"Rp410000",image:"https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=900&q=80"},
+    {name:"Lembang Valley Resort",rating:"9.1",price:"Rp590000",image:"https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=900&q=80"}
+  ],
+  "Surabaya":[
+    {name:"Tunjungan City Hotel",rating:"8.8",price:"Rp480000",image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=80"},
+    {name:"Pakuwon Suites",rating:"8.7",price:"Rp450000",image:"https://images.unsplash.com/photo-1562438668-bcf0ca6578f0?auto=format&fit=crop&w=900&q=80"},
+    {name:"Manyar Prime Stay",rating:"8.6",price:"Rp410000",image:"https://images.unsplash.com/photo-1568495248636-6432b97bd949?auto=format&fit=crop&w=900&q=80"},
+    {name:"Kenjeran Bay Hotel",rating:"8.5",price:"Rp390000",image:"https://images.unsplash.com/photo-1519821172141-b5d8dbb7db2b?auto=format&fit=crop&w=900&q=80"},
+    {name:"Surabaya Grand Palace",rating:"9.0",price:"Rp620000",image:"https://images.unsplash.com/photo-1578898887932-dce23a595ad4?auto=format&fit=crop&w=900&q=80"}
+  ],
+  "Yogyakarta":[
+    {name:"Yogyakarta Heritage Stay",rating:"8.7",price:"Rp350000",image:"https://images.unsplash.com/photo-1521783593447-5702b9bfd267?auto=format&fit=crop&w=900&q=80"},
+    {name:"Malioboro City Inn",rating:"8.8",price:"Rp420000",image:"https://images.unsplash.com/photo-1613977257592-487ecd136cc3?auto=format&fit=crop&w=900&q=80"},
+    {name:"Tugu Art Hotel",rating:"8.9",price:"Rp480000",image:"https://images.unsplash.com/photo-1468824357306-a439d58ccb1c?auto=format&fit=crop&w=900&q=80"},
+    {name:"Kaliurang Breeze",rating:"8.5",price:"Rp330000",image:"https://images.unsplash.com/photo-1568084680786-a84f91d1153c?auto=format&fit=crop&w=900&q=80"},
+    {name:"Jogja Royal Resort",rating:"9.1",price:"Rp610000",image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=900&q=80"}
+  ]
+};
+
+function renderCityHotels(city){
+  const grid=document.getElementById('cityHotelGrid');
+  const title=document.getElementById('cityHotelTitle');
+  const sub=document.getElementById('cityHotelSub');
+  if(!grid||!title||!sub) return;
+
+  const source=cityHotelCatalog[city] || [
+    {name:`${city} Vista Resort`,rating:'8.8',price:'Rp450000',image:'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=900&q=80'},
+    {name:`${city} City Inn`,rating:'8.6',price:'Rp390000',image:'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=900&q=80'},
+    {name:`${city} Grand Central`,rating:'8.9',price:'Rp520000',image:'https://images.unsplash.com/photo-1455587734955-081b22074882?auto=format&fit=crop&w=900&q=80'},
+    {name:`${city} Heritage Stay`,rating:'8.7',price:'Rp430000',image:'https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?auto=format&fit=crop&w=900&q=80'},
+    {name:`${city} Sky Suites`,rating:'9.0',price:'Rp580000',image:'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=900&q=80'}
+  ];
+
+  title.textContent=`5 Hotel Pilihan di ${city}`;
+  sub.textContent=`Rekomendasi hotel terbaik di ${city}, desain sudah disesuaikan dengan referensi.`;
+  grid.innerHTML=source.slice(0,5).map(h=>`
+    <article class="city-hotel-card">
+      <img src="${h.image}" alt="${h.name}">
+      <div class="card-body">
+        <h4>${h.name}</h4>
+        <p>${city} • Rating ${h.rating}</p>
+        <p>Mulai dari <strong>${h.price}/malam</strong></p>
+        <a class="btn" href="/hotels">Lihat Detail</a>
+      </div>
+    </article>
+  `).join('');
+}
