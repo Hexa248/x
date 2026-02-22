@@ -1,0 +1,56 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{.Title}} - Hotel Booking</title>
+  <link rel="stylesheet" href="/assets/css/style.css"/>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">StayNusa</div>
+  <nav>
+    <a href="/">Beranda</a>
+    <a href="/hotels">Hotel</a>
+    <a href="/recommendations">Rekomendasi</a>
+    <a href="/payment">Payment</a>
+    <a href="/login">Login</a>
+  </nav>
+</header>
+<main class="container">{{template "content" .}}</main>
+<footer class="site-footer">
+  <section class="footer-app-cta">
+    <div>
+      <h3>Semua pesanan dalam genggaman, selalu siap jalan-jalan.</h3>
+      <p>Masukkan email untuk update promo dan penawaran terbaik tiap minggu.</p>
+    </div>
+    <div class="newsletter">
+      <input type="email" placeholder="Alamat emailmu">
+      <button>Berlangganan Newsletter</button>
+    </div>
+  </section>
+  <section class="footer-main">
+    <div>
+      <h2>staynusa</h2>
+      <p>Partner perjalanan hotel terpercaya di Indonesia.</p>
+      <a class="footer-btn" href="#">Jadi Partner StayNusa</a>
+    </div>
+    <div>
+      <h4>Tentang</h4>
+      <a href="#">Cara Pesan</a><a href="#">Hubungi Kami</a><a href="#">Pusat Bantuan</a><a href="#">Karier</a>
+    </div>
+    <div>
+      <h4>Produk</h4>
+      <a href="#">Hotel</a><a href="#">Tiket Pesawat</a><a href="#">Rental Mobil</a><a href="#">Antar Jemput</a>
+    </div>
+    <div>
+      <h4>Lainnya</h4>
+      <a href="#">Affiliate</a><a href="#">Blog</a><a href="#">Privasi</a><a href="#">Syarat & Ketentuan</a>
+    </div>
+  </section>
+</footer>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>
+{{end}}
