@@ -1,0 +1,60 @@
+{{define "content"}}
+<section class="hero city-hero" id="city-hero" style="background-image:linear-gradient(120deg, rgba(14,77,146,.84), rgba(0,169,255,.75)), url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80')">
+  <div>
+    <h1>Jelajahi Hotel di Kota Ikonik Indonesia</h1>
+    <p>Pilih kota, lalu tampil 5 hotel terbaik di kota tersebut dengan desain modern dan rapi.</p>
+  </div>
+</section>
+
+<section class="search-panel">
+  <div class="field">
+    <label>Kota, tujuan, atau nama hotel</label>
+    <input id="cityInput" value="" placeholder="Pilih kota tujuan" readonly>
+  </div>
+  <div class="field">
+    <label>Tanggal Check-in & Check-out</label>
+    <input value="Min, 22 Feb 2026 - Sen, 23 Feb 2026" readonly>
+  </div>
+  <div class="field">
+    <label>Tamu dan Kamar</label>
+    <input value="2 Dewasa, 0 Anak, 1 Kamar" readonly>
+  </div>
+  <button class="btn search-btn">Cari</button>
+</section>
+
+<section class="home-grid">
+  <div class="map-small">
+    <h3>Map Lokasi Hotel</h3>
+    <iframe id="main-city-map" src="https://maps.google.com/maps?q=-2.548926,118.014863&z=5&output=embed" loading="lazy"></iframe>
+  </div>
+  <div class="comment-box">
+    <h3>Komentar Tamu</h3>
+    <p>⭐ "Pelayanannya cepat, check-in hanya 5 menit."</p>
+    <p>⭐ "Kamar bersih dan map lokasi akurat sesuai kotanya."</p>
+    <p>⭐ "Cocok untuk liburan keluarga dan perjalanan kerja."</p>
+  </div>
+</section>
+
+<h3>Kota Populer Indonesia</h3>
+<section class="city-cards">
+{{range .Hotels}}
+  <article class="city-card" data-city="{{.City}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
+    <img src="{{.Image}}" alt="{{.City}}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/cityfallback/1200/800'">
+    <div class="city-overlay">
+      <h4>{{.City}}</h4>
+      <p>Hotel di {{.City}} mulai dari Rp {{printf "%d" .ID}}90.000/malam</p>
+    </div>
+  </article>
+{{end}}
+</section>
+
+<section class="city-hotel-section">
+  <div class="city-hotel-head">
+    <h3 id="cityHotelTitle">Pilih kota untuk melihat hotel</h3>
+    <p id="cityHotelSub">Setelah pilih kota, akan muncul 5 hotel rekomendasi.</p>
+  </div>
+  <div id="cityHotelGrid" class="city-hotel-grid"></div>
+</section>
+
+<div id="hotel-popup" class="popup hidden"><div class="popup-content"><p id="popup-text"></p><button onclick="closePopup()">Tutup</button></div></div>
+{{end}}

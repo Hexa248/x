@@ -1,0 +1,49 @@
+{{define "content"}}
+<article class="detail">
+  <div class="sticky-tabs" id="stickyTabs">
+    <a href="#info" class="tab-anchor active">Info Umum</a>
+    <a href="#kamar" class="tab-anchor">Kamar</a>
+    <a href="#lokasi" class="tab-anchor">Lokasi</a>
+    <a href="#fasilitas" class="tab-anchor">Fasilitas</a>
+    <a href="#kebijakan" class="tab-anchor">Kebijakan</a>
+    <a href="#review" class="tab-anchor">Review</a>
+  </div>
+
+  <section id="info" class="info-section">
+    <div class="detail-hero-grid">
+      <img src="{{.Hotel.Image}}" alt="{{.Hotel.Name}}">
+      <div class="detail-mini-grid">
+        <img src="{{.Hotel.Image}}" alt="{{.Hotel.Name}}">
+        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=80" alt="Interior">
+        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=80" alt="Room">
+        <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=900&q=80" alt="Facility">
+      </div>
+    </div>
+    <h2>{{.Hotel.Name}}</h2>
+    <p>{{.Hotel.Description}}</p>
+  </section>
+
+  <section id="kamar" class="info-section">
+    <h3>Pilih kamar sesuai kebutuhan</h3>
+    <p>Setiap tipe kamar memiliki fasilitas berbeda dan denah berbeda.</p>
+    <a class="btn" href="/booking?hotel={{.Hotel.ID}}">Lanjut Pilih Kamar</a>
+  </section>
+
+  <section id="lokasi" class="info-section">
+    <h3>Lokasi Hotel</h3>
+    <iframe src="{{.Hotel.MapEmbedURL}}" loading="lazy"></iframe>
+  </section>
+
+  <section id="fasilitas" class="info-section">
+    <h3>Fasilitas Utama</h3>
+    <ul><li>WiFi cepat</li><li>Resepsionis 24 jam</li><li>Parkir</li><li>Restoran</li></ul>
+  </section>
+
+  <section id="kebijakan" class="info-section"><h3>Kebijakan</h3><p>Check-in 14:00, check-out 12:00, pembatalan sesuai tipe kamar.</p></section>
+
+  <section id="review" class="info-section">
+    <h3>Review</h3>
+    {{range .Hotel.Comments}}<p>⭐ {{.Author}}: {{.Message}}</p>{{end}}
+  </section>
+</article>
+{{end}}

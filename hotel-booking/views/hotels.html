@@ -1,0 +1,54 @@
+{{define "content"}}
+<section class="search-panel compact">
+  <div class="field">
+    <label>Kota, tujuan, atau nama hotel</label>
+    <input id="cityInputHotels" value="{{if .SelectedCity}}{{.SelectedCity}}, Indonesia{{end}}" placeholder="Pilih kota dari beranda" readonly>
+  </div>
+  <div class="field">
+    <label>Tanggal Check-in & Check-out</label>
+    <input value="Min, 22 Feb 2026 - Sen, 23 Feb 2026" readonly>
+  </div>
+  <div class="field">
+    <label>Tamu dan Kamar</label>
+    <input value="2 Dewasa, 0 Anak, 1 Kamar" readonly>
+  </div>
+  <button class="btn search-btn">Cari</button>
+</section>
+
+<section class="hotel-results-layout">
+  <aside class="filter-sidebar">
+    <div class="filter-card"><h4>Tipe Akomodasi</h4><ul><li>☑ Hotel</li><li>☐ Vila</li><li>☐ Apartemen</li><li>☐ Guesthouse</li></ul><a href="#">Lihat Semua</a></div>
+    <div class="filter-card"><h4>Fasilitas Populer</h4><ul><li>☑ Restoran</li><li>☑ Sarapan Tersedia</li><li>☐ Early Check-In</li><li>☐ Antar-jemput Bandara</li></ul><a href="#">Lihat Semua</a></div>
+    <div class="filter-card"><h4>Promo & Diskon</h4><ul><li>☑ Promo untuk Anda</li><li>☑ Extra Benefit</li><li>☐ Promo Domestik</li></ul></div>
+    <div class="filter-card"><h4>Bintang</h4><ul><li>☑ 1 ⭐</li><li>☑ 2 ⭐</li><li>☐ 3 ⭐</li><li>☐ 4 ⭐</li><li>☐ 5 ⭐</li></ul></div>
+    <div class="filter-actions"><button class="btn secondary">Reset</button><button class="btn">Terapkan</button></div>
+  </aside>
+
+  <section class="hotel-list-area">
+    <div class="list-head">
+      <h2>{{if .SelectedCity}}5 Hotel Pilihan di {{.SelectedCity}}{{else}}Daftar Hotel{{end}}</h2>
+      <p>{{if .SelectedCity}}Rekomendasi hotel terbaik untuk kota {{.SelectedCity}} dengan desain ala Traveloka/Booking.{{else}}Pilih kota dari beranda untuk menampilkan hotel per kota.{{end}}</p>
+    </div>
+
+    {{range .Hotels}}
+    <article class="hotel-list-card">
+      <img src="{{.Image}}" alt="{{.Name}}">
+      <div class="hotel-main">
+        <h3>{{.Name}}</h3>
+        <p class="meta">📍 {{.City}} • {{.Address}}</p>
+        <p><span class="tag">Hotel</span> ⭐⭐ Preferred Partner</p>
+        <p class="coupon">🎁 Gunakan Kupon JALANYUK diskon 8% untuk Pengguna Baru</p>
+        <div class="review-box">
+          <strong>Ulasan tamu:</strong> Hotel bersih, lokasi strategis, staf ramah, dan cocok untuk perjalanan bisnis maupun keluarga.
+        </div>
+      </div>
+      <div class="hotel-side">
+        <p><strong>{{printf "%.1f" .Rating}}</strong> Mengesankan</p>
+        <p class="price">Rp {{printf "%d" .ID}}47.234</p>
+        <a class="btn" href="/booking?hotel={{.ID}}">Pilih Kamar</a>
+      </div>
+    </article>
+    {{end}}
+  </section>
+</section>
+{{end}}
