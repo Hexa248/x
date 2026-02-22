@@ -56,6 +56,21 @@ if(sections.length && tabs.length){
     if(active) active.classList.add('active');
   };
 
+  const smoothTargets=document.querySelectorAll('.tab-anchor, .sticky-tabs-actions a[href^="#"]');
+  smoothTargets.forEach(link=>{
+    link.addEventListener('click',(e)=>{
+      const href=link.getAttribute('href') || '';
+      if(!href.startsWith('#') || href === '#') return;
+      const target=document.querySelector(href);
+      if(!target) return;
+      e.preventDefault();
+      const sticky=document.querySelector('.sticky-tabs');
+      const offset=(sticky ? sticky.offsetHeight : 0) + 8;
+      const targetY=target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({top:targetY, behavior:'smooth'});
+    });
+  });
+
   window.addEventListener('scroll', updateActiveTab, {passive:true});
   window.addEventListener('resize', updateActiveTab);
   updateActiveTab();
