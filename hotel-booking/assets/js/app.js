@@ -379,9 +379,52 @@ if(hotelListing){
       filterActionText.textContent='Reset semua filter ke kondisi default?';
     }
     filterActionPopup.classList.remove('hidden');
+    lastScrollY=window.scrollY;
+    const activePane=document.querySelector('.split-scroll-right') || document.querySelector('.split-scroll-left');
+    lastPaneY=activePane ? activePane.scrollTop : 0;
+    popupShift=0;
+    const content=filterActionPopup.querySelector('.filter-action-popup-content');
+    if(content) content.style.transform='translateY(0)';
   };
 
-  const closeFilterActionPopup=()=>{ if(filterActionPopup) filterActionPopup.classList.add('hidden'); };
+  let lastScrollY=window.scrollY;
+  let lastPaneY=0;
+  let popupShift=0;
+  const maxPopupShift=120;
+
+  const updateFilterPopupShift=(delta)=>{
+    if(!filterActionPopup || filterActionPopup.classList.contains('hidden')) return;
+    const content=filterActionPopup.querySelector('.filter-action-popup-content');
+    if(!content) return;
+    popupShift=Math.max(0, Math.min(maxPopupShift, popupShift+delta));
+    content.style.transform=`translateY(${popupShift}px)`;
+  };
+
+  const handleWindowScroll=()=>{
+    const currentY=window.scrollY;
+    const delta=currentY-lastScrollY;
+    updateFilterPopupShift(delta);
+    lastScrollY=currentY;
+  };
+
+  const handlePaneScroll=(e)=>{
+    const pane=e.currentTarget;
+    const current=pane.scrollTop;
+    const delta=current-lastPaneY;
+    updateFilterPopupShift(delta);
+    lastPaneY=current;
+  };
+
+  const closeFilterActionPopup=()=>{
+    if(!filterActionPopup) return;
+    filterActionPopup.classList.add('hidden');
+    popupShift=0;
+    const content=filterActionPopup.querySelector('.filter-action-popup-content');
+    if(content) content.style.transform='translateY(0)';
+  };
+
+  window.addEventListener('scroll', handleWindowScroll, {passive:true});
+  document.querySelectorAll('.split-scroll-pane').forEach(p=>p.addEventListener('scroll', handlePaneScroll, {passive:true}));
 
   [priceMin, priceMax].forEach(el=>el?.addEventListener('input',applyFilters));
   document.querySelectorAll('input[data-filter]').forEach(el=>el.addEventListener('change',applyFilters));
