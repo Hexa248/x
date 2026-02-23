@@ -39,9 +39,29 @@ cityCards.forEach(card=>card.addEventListener('click',()=>{
 const sections=document.querySelectorAll('.info-section');
 const tabs=document.querySelectorAll('.tab-anchor');
 if(sections.length && tabs.length){
+  const sticky=document.querySelector('.sticky-tabs');
+  const tabsTrack=document.querySelector('.sticky-tabs-links');
+  const indicator=document.querySelector('.tab-indicator');
+
+  const updateDockedState=()=>{
+    if(!sticky) return;
+    const trigger=(sticky.parentElement ? sticky.parentElement.offsetTop : 0) + 40;
+    sticky.classList.toggle('is-docked', window.scrollY > trigger);
+  };
+
+  const moveIndicator=()=>{
+    if(!indicator || !tabsTrack) return;
+    const active=tabsTrack.querySelector('.tab-anchor.active');
+    if(!active){
+      indicator.style.width='0px';
+      return;
+    }
+    indicator.style.width=`${active.offsetWidth}px`;
+    indicator.style.transform=`translateX(${active.offsetLeft}px)`;
+  };
+
   const updateActiveTab=()=>{
-    const sticky=document.querySelector('.sticky-tabs');
-    const headerOffset=(sticky ? sticky.offsetHeight : 0) + 12;
+    const headerOffset=(sticky ? sticky.offsetHeight : 0) + 14;
     const y=window.scrollY + headerOffset;
 
     let current=sections[0];
@@ -54,6 +74,7 @@ if(sections.length && tabs.length){
     tabs.forEach(t=>t.classList.remove('active'));
     const active=document.querySelector(`.tab-anchor[href="#${current.id}"]`);
     if(active) active.classList.add('active');
+    moveIndicator();
   };
 
   const smoothTargets=document.querySelectorAll('.tab-anchor, .sticky-tabs-actions a[href^="#"]');
@@ -64,15 +85,15 @@ if(sections.length && tabs.length){
       const target=document.querySelector(href);
       if(!target) return;
       e.preventDefault();
-      const sticky=document.querySelector('.sticky-tabs');
-      const offset=(sticky ? sticky.offsetHeight : 0) + 8;
+      const offset=(sticky ? sticky.offsetHeight : 0) + 10;
       const targetY=target.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({top:targetY, behavior:'smooth'});
     });
   });
 
-  window.addEventListener('scroll', updateActiveTab, {passive:true});
-  window.addEventListener('resize', updateActiveTab);
+  window.addEventListener('scroll', ()=>{ updateDockedState(); updateActiveTab(); }, {passive:true});
+  window.addEventListener('resize', ()=>{ updateDockedState(); moveIndicator(); updateActiveTab(); });
+  updateDockedState();
   updateActiveTab();
 }
 
@@ -164,4 +185,36 @@ function renderCityHotels(city){
       </div>
     </article>
   `).join('');
+}
+
+
+const paymentGrid=document.getElementById('paymentMethodGrid');
+if(paymentGrid){
+  const cards=[...paymentGrid.querySelectorAll('.payment-method-card')];
+  const selectedPaymentText=document.getElementById('selectedPaymentText');
+  const payNowBtn=document.getElementById('payNowBtn');
+
+  const setActive=(card)=>{
+    cards.forEach(c=>c.classList.remove('active'));
+    card.classList.add('active');
+    const method=card.dataset.method || 'Virtual Account';
+    if(selectedPaymentText) selectedPaymentText.innerHTML=`Metode dipilih: <strong>${method}</strong>`;
+    if(payNowBtn) payNowBtn.textContent=`Bayar dengan ${method}`;
+  };
+
+  cards.forEach(card=>{
+    card.addEventListener('click',()=>{
+      const radio=card.querySelector('input[type="radio"]');
+      if(radio) radio.checked=true;
+      setActive(card);
+    });
+  });
+
+  if(payNowBtn){
+    payNowBtn.addEventListener('click',()=>{
+      const active=paymentGrid.querySelector('.payment-method-card.active');
+      const method=active ? active.dataset.method : 'Virtual Account';
+      alert(`Mock pembayaran berhasil diproses lewat ${method}.`);
+    });
+  }
 }
