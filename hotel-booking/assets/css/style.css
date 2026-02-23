@@ -130,5 +130,7 @@ body.js-animate .scroll-animate.in-view{opacity:1;transform:none}
 #hotelFilterSidebar input[type="range"]{width:100%}
 .hotel-popup-content{min-width:320px;max-width:460px;display:grid;gap:8px}
 .hotel-popup-content input{width:100%;padding:10px;border:1px solid #ccd8ea;border-radius:10px}
+.filter-action-popup-content{min-width:300px;max-width:420px;display:grid;gap:10px}
+.filter-action-popup-content p{margin:0;color:#5f6f82}
 #hotelEmptyState{background:#fff;border:1px dashed #c9d6ea;border-radius:12px;padding:14px}
 

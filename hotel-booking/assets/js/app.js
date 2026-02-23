@@ -206,6 +206,11 @@ if(hotelListing){
   const popupBody=document.getElementById('hotelPopupBody');
   const popupApply=document.getElementById('hotelPopupApply');
   const popupCancel=document.getElementById('hotelPopupCancel');
+  const filterActionPopup=document.getElementById('filter-action-popup');
+  const filterActionTitle=document.getElementById('filterActionTitle');
+  const filterActionText=document.getElementById('filterActionText');
+  const filterActionCancel=document.getElementById('filterActionCancel');
+  const filterActionConfirm=document.getElementById('filterActionConfirm');
   const priceMin=document.getElementById('priceMin');
   const priceMax=document.getElementById('priceMax');
   const priceMinLabel=document.getElementById('priceMinLabel');
@@ -351,11 +356,7 @@ if(hotelListing){
     });
   });
 
-  [priceMin, priceMax].forEach(el=>el?.addEventListener('input',applyFilters));
-  document.querySelectorAll('input[data-filter]').forEach(el=>el.addEventListener('change',applyFilters));
-  searchHotelsBtn?.addEventListener('click',applyFilters);
-  applyFiltersBtn?.addEventListener('click',applyFilters);
-  resetFiltersBtn?.addEventListener('click',()=>{
+  const doResetFilters=()=>{
     state.city='';
     state.minPrice=100000;
     state.maxPrice=2000000;
@@ -365,6 +366,36 @@ if(hotelListing){
     document.querySelectorAll('input[data-filter="star"]').forEach(chk=>{ if(['3','4','5'].includes(chk.value)) chk.checked=true; });
     refreshSearchInputs();
     applyFilters();
+  };
+
+  const openFilterActionPopup=(kind)=>{
+    if(!filterActionPopup || !filterActionTitle || !filterActionText) return;
+    filterActionPopup.dataset.action=kind;
+    if(kind==='apply'){
+      filterActionTitle.textContent='Terapkan Filter';
+      filterActionText.textContent='Gunakan filter saat ini untuk memperbarui daftar hotel?';
+    }else{
+      filterActionTitle.textContent='Reset Filter';
+      filterActionText.textContent='Reset semua filter ke kondisi default?';
+    }
+    filterActionPopup.classList.remove('hidden');
+  };
+
+  const closeFilterActionPopup=()=>{ if(filterActionPopup) filterActionPopup.classList.add('hidden'); };
+
+  [priceMin, priceMax].forEach(el=>el?.addEventListener('input',applyFilters));
+  document.querySelectorAll('input[data-filter]').forEach(el=>el.addEventListener('change',applyFilters));
+  searchHotelsBtn?.addEventListener('click',applyFilters);
+  applyFiltersBtn?.addEventListener('click',()=>openFilterActionPopup('apply'));
+  resetFiltersBtn?.addEventListener('click',()=>openFilterActionPopup('reset'));
+
+  filterActionCancel?.addEventListener('click', closeFilterActionPopup);
+  filterActionPopup?.addEventListener('click',(e)=>{ if(e.target===filterActionPopup) closeFilterActionPopup(); });
+  filterActionConfirm?.addEventListener('click',()=>{
+    const action=filterActionPopup?.dataset.action;
+    if(action==='reset') doResetFilters();
+    if(action==='apply') applyFilters();
+    closeFilterActionPopup();
   });
 
   refreshSearchInputs();
