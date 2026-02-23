@@ -188,6 +188,189 @@ function renderCityHotels(city){
 }
 
 
+
+
+const hotelListing=document.getElementById('hotelListing');
+if(hotelListing){
+  const cityInputHotels=document.getElementById('cityInputHotels');
+  const dateInputHotels=document.getElementById('dateInputHotels');
+  const guestInputHotels=document.getElementById('guestInputHotels');
+  const searchHotelsBtn=document.getElementById('searchHotelsBtn');
+  const cards=[...hotelListing.querySelectorAll('.result-card')];
+  const summary=document.getElementById('hotelResultSummary');
+  const emptyState=document.getElementById('hotelEmptyState');
+  const applyFiltersBtn=document.getElementById('applyFiltersBtn');
+  const resetFiltersBtn=document.getElementById('resetFiltersBtn');
+  const popup=document.getElementById('hotel-search-popup');
+  const popupTitle=document.getElementById('hotelPopupTitle');
+  const popupBody=document.getElementById('hotelPopupBody');
+  const popupApply=document.getElementById('hotelPopupApply');
+  const popupCancel=document.getElementById('hotelPopupCancel');
+  const priceMin=document.getElementById('priceMin');
+  const priceMax=document.getElementById('priceMax');
+  const priceMinLabel=document.getElementById('priceMinLabel');
+  const priceMaxLabel=document.getElementById('priceMaxLabel');
+
+  const formatIDR=(v)=>`IDR ${Number(v).toLocaleString('id-ID')}`;
+  const state={
+    city:(cityInputHotels?.value||'').replace(', Indonesia','').trim(),
+    checkIn:'Min, 22 Feb 2026',
+    checkOut:'Sen, 23 Feb 2026',
+    adults:2,
+    children:0,
+    rooms:1,
+    minPrice:Number(priceMin?.value||100000),
+    maxPrice:Number(priceMax?.value||2000000)
+  };
+
+  const refreshSearchInputs=()=>{
+    if(cityInputHotels) cityInputHotels.value=state.city ? `${state.city}, Indonesia` : '';
+    if(dateInputHotels) dateInputHotels.value=`${state.checkIn} - ${state.checkOut}`;
+    if(guestInputHotels) guestInputHotels.value=`${state.adults} Dewasa, ${state.children} Anak, ${state.rooms} Kamar`;
+  };
+
+  const openPopup=(kind)=>{
+    if(!popup || !popupBody || !popupTitle) return;
+    popup.dataset.kind=kind;
+    popupBody.innerHTML='';
+
+    if(kind==='city'){
+      popupTitle.textContent='Pilih Kota atau Nama Hotel';
+      popupBody.innerHTML=`<input id="popupCityValue" placeholder="Contoh: Jakarta atau Nusantara" value="${state.city}" />`;
+    }
+
+    if(kind==='date'){
+      popupTitle.textContent='Pilih Tanggal Menginap';
+      popupBody.innerHTML=`
+        <label>Check-in</label>
+        <input id="popupCheckIn" type="date" value="2026-02-22" />
+        <label>Check-out</label>
+        <input id="popupCheckOut" type="date" value="2026-02-23" />
+      `;
+    }
+
+    if(kind==='guest'){
+      popupTitle.textContent='Atur Tamu & Kamar';
+      popupBody.innerHTML=`
+        <label>Dewasa</label><input id="popupAdults" type="number" min="1" value="${state.adults}" />
+        <label>Anak</label><input id="popupChildren" type="number" min="0" value="${state.children}" />
+        <label>Kamar</label><input id="popupRooms" type="number" min="1" value="${state.rooms}" />
+      `;
+    }
+
+    popup.classList.remove('hidden');
+  };
+
+  const closePopup=()=>{ if(popup) popup.classList.add('hidden'); };
+
+  const selectedStars=()=>[...document.querySelectorAll('input[data-filter="star"]:checked')].map(x=>Number(x.value));
+  const selectedRatings=()=>[...document.querySelectorAll('input[data-filter="rating"]:checked')].map(x=>Number(x.value));
+
+  const applyFilters=()=>{
+    if(priceMin && priceMax){
+      state.minPrice=Number(priceMin.value);
+      state.maxPrice=Number(priceMax.value);
+      if(state.minPrice > state.maxPrice){
+        const tmp=state.minPrice; state.minPrice=state.maxPrice; state.maxPrice=tmp;
+      }
+      priceMin.value=String(state.minPrice);
+      priceMax.value=String(state.maxPrice);
+      if(priceMinLabel) priceMinLabel.textContent=formatIDR(state.minPrice);
+      if(priceMaxLabel) priceMaxLabel.textContent=formatIDR(state.maxPrice);
+    }
+
+    const stars=selectedStars();
+    const ratings=selectedRatings();
+    const keyword=(state.city||'').toLowerCase();
+
+    let visible=0;
+    cards.forEach(card=>{
+      const city=(card.dataset.city||'').toLowerCase();
+      const name=(card.dataset.name||'').toLowerCase();
+      const rating=Number(card.dataset.rating||0);
+      const star=Number(card.dataset.star||0);
+      const price=Number(card.dataset.price||0);
+
+      const cityMatch=!keyword || city.includes(keyword) || name.includes(keyword);
+      const starMatch=!stars.length || stars.includes(star);
+      const ratingMatch=!ratings.length || ratings.some(r=>rating>=r);
+      const priceMatch=price>=state.minPrice && price<=state.maxPrice;
+
+      const show=cityMatch && starMatch && ratingMatch && priceMatch;
+      card.classList.toggle('hidden', !show);
+      if(show) visible+=1;
+    });
+
+    if(summary){
+      summary.textContent=visible>0 ? `Menampilkan ${visible} hotel sesuai pencarian & filter aktif.` : 'Tidak ada hasil, coba ubah filter atau kata kunci.';
+    }
+    if(emptyState) emptyState.classList.toggle('hidden', visible>0);
+  };
+
+  cityInputHotels?.addEventListener('click',()=>openPopup('city'));
+  dateInputHotels?.addEventListener('click',()=>openPopup('date'));
+  guestInputHotels?.addEventListener('click',()=>openPopup('guest'));
+  popupCancel?.addEventListener('click', closePopup);
+  popup?.addEventListener('click',(e)=>{ if(e.target===popup) closePopup(); });
+
+  popupApply?.addEventListener('click',()=>{
+    const kind=popup?.dataset.kind;
+    if(kind==='city'){
+      const value=document.getElementById('popupCityValue');
+      state.city=(value?.value||'').trim();
+    }
+    if(kind==='date'){
+      const ci=document.getElementById('popupCheckIn');
+      const co=document.getElementById('popupCheckOut');
+      if(ci?.value) state.checkIn=new Date(ci.value).toLocaleDateString('id-ID',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+      if(co?.value) state.checkOut=new Date(co.value).toLocaleDateString('id-ID',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+    }
+    if(kind==='guest'){
+      const adults=document.getElementById('popupAdults');
+      const children=document.getElementById('popupChildren');
+      const rooms=document.getElementById('popupRooms');
+      state.adults=Math.max(1, Number(adults?.value||2));
+      state.children=Math.max(0, Number(children?.value||0));
+      state.rooms=Math.max(1, Number(rooms?.value||1));
+    }
+
+    refreshSearchInputs();
+    closePopup();
+    applyFilters();
+  });
+
+  document.querySelectorAll('.quick-date').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const start=new Date();
+      start.setDate(start.getDate()+Number(btn.dataset.days||0));
+      const end=new Date(start);
+      end.setDate(end.getDate()+1);
+      state.checkIn=start.toLocaleDateString('id-ID',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+      state.checkOut=end.toLocaleDateString('id-ID',{weekday:'short', day:'2-digit', month:'short', year:'numeric'});
+      refreshSearchInputs();
+    });
+  });
+
+  [priceMin, priceMax].forEach(el=>el?.addEventListener('input',applyFilters));
+  document.querySelectorAll('input[data-filter]').forEach(el=>el.addEventListener('change',applyFilters));
+  searchHotelsBtn?.addEventListener('click',applyFilters);
+  applyFiltersBtn?.addEventListener('click',applyFilters);
+  resetFiltersBtn?.addEventListener('click',()=>{
+    state.city='';
+    state.minPrice=100000;
+    state.maxPrice=2000000;
+    if(priceMin) priceMin.value='100000';
+    if(priceMax) priceMax.value='2000000';
+    document.querySelectorAll('input[data-filter]').forEach(chk=>{ chk.checked=false; });
+    document.querySelectorAll('input[data-filter="star"]').forEach(chk=>{ if(['3','4','5'].includes(chk.value)) chk.checked=true; });
+    refreshSearchInputs();
+    applyFilters();
+  });
+
+  refreshSearchInputs();
+  applyFilters();
+}
+
 const paymentGrid=document.getElementById('paymentMethodGrid');
 if(paymentGrid){
   const cards=[...paymentGrid.querySelectorAll('.payment-method-card')];

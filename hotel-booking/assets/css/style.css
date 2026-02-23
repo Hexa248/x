@@ -125,3 +125,10 @@ body.js-animate .scroll-animate.in-view{opacity:1;transform:none}
 .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini-grid span{background:#eef5ff;color:#20517f;border-radius:10px;padding:10px 8px;font-weight:700;font-size:13px}
 .price-line{height:4px;background:#16a0ff;border-radius:999px;position:relative}.price-line:before,.price-line:after{content:'';position:absolute;top:-7px;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid #d6dfef}.price-line:after{right:0}
 .price-chip-row{display:flex;gap:8px}.price-chip-row span{border:1px solid #d0dae9;border-radius:999px;padding:6px 10px;background:#fff}
+
+.quick-date{cursor:pointer}
+#hotelFilterSidebar input[type="range"]{width:100%}
+.hotel-popup-content{min-width:320px;max-width:460px;display:grid;gap:8px}
+.hotel-popup-content input{width:100%;padding:10px;border:1px solid #ccd8ea;border-radius:10px}
+#hotelEmptyState{background:#fff;border:1px dashed #c9d6ea;border-radius:12px;padding:14px}
+
