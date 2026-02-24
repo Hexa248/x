@@ -148,3 +148,11 @@ body.js-animate .scroll-animate.in-view{opacity:1;transform:none}
 
 
 @media (min-width:901px){.pull-search-handle,.floating-search-sheet{display:none !important}}
+
+.admin-shell{display:grid;gap:12px}
+.admin-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid #dfe8f7;border-radius:12px;padding:12px}
+.admin-kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.admin-kpi-grid article{background:#fff;border:1px solid #e0e9f7;border-radius:12px;padding:12px}
+.admin-kpi-grid h4{margin:0 0 6px}.admin-kpi-grid p{margin:0;font-size:26px;font-weight:800;color:#0a77d8}
+.admin-table-wrap{background:#fff;border:1px solid #dfE8f7;border-radius:12px;padding:12px;overflow:auto}
+.admin-table{width:100%;border-collapse:collapse}.admin-table th,.admin-table td{padding:10px;border-bottom:1px solid #ecf1fb;text-align:left}.admin-table th{background:#f6f9ff}

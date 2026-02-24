@@ -1,0 +1,34 @@
+{{define "content"}}
+<section class="admin-shell">
+  <div class="admin-head">
+    <h2>Staff Hotel Dashboard</h2>
+    <div class="actions">
+      <a class="btn" href="/staff/rooms">Operasional Kamar</a>
+      <a class="btn secondary" href="/admin">Panel Admin</a>
+    </div>
+  </div>
+
+  <div class="admin-kpi-grid">
+    <article><h4>Total Hotel Terkelola</h4><p>{{len .Hotels}}</p></article>
+    <article><h4>Total Kamar</h4><p>{{len .Rooms}}</p></article>
+    <article><h4>Booking Masuk</h4><p>{{.BookingsCount}}</p></article>
+    <article><h4>Status</h4><p>Operasional</p></article>
+  </div>
+
+  <section class="admin-table-wrap">
+    <h3>Ringkasan Hotel</h3>
+    <table class="admin-table">
+      <thead><tr><th>Hotel</th><th>Kota</th><th>Aksi Cepat</th></tr></thead>
+      <tbody>
+      {{range .Hotels}}
+      <tr>
+        <td>{{.Name}}</td>
+        <td>{{.City}}</td>
+        <td><a href="/hotel?id={{.ID}}">Lihat Halaman Hotel</a></td>
+      </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+</section>
+{{end}}
