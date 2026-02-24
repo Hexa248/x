@@ -1,0 +1,142 @@
+{{define "content"}}
+<div class="sticky-tabs booking-tabs">
+  <a href="#overview" class="tab-anchor active">Info Umum</a>
+  <a href="#kamar" class="tab-anchor">Kamar</a>
+  <a href="#lokasi" class="tab-anchor">Lokasi</a>
+  <a href="#fasilitas" class="tab-anchor">Fasilitas</a>
+  <a href="#kebijakan" class="tab-anchor">Kebijakan</a>
+  <a href="#review" class="tab-anchor">Review</a>
+  <div class="tab-tools">Copy link · Simpan akomodasi · Kembali ke Atas</div>
+</div>
+
+<section id="overview" class="info-section booking-hero scroll-animate">
+  <div class="booking-gallery">
+    <img class="main" src="{{.Hotel.Image}}" alt="{{.Hotel.Name}}">
+    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=80" alt="lobby">
+    <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=80" alt="room">
+    <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=900&q=80" alt="hotel">
+    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=900&q=80" alt="bathroom">
+  </div>
+  <div class="booking-headline">
+    <div>
+      <h2>{{.Hotel.Name}}</h2>
+      <p>Hotel · ★★ · Preferred Partner</p>
+    </div>
+    <div class="price-chip">Harga/kamar/malam mulai dari <strong>Rp 213.268</strong> <a class="btn" href="#kamar">Pilih Kamar</a></div>
+  </div>
+  <div class="promo-strip">Jangan lewatkan! <strong>Sisa 3 kamar</strong> untuk harga paling murah.</div>
+  <div class="quick-info-grid">
+    <div><h4>7,9/10 Mengesankan</h4><p>8.008 ulasan tamu. Tamu paling sering memuji kebersihan kamar dan lokasi strategis.</p></div>
+    <div><h4>Area Akomodasi</h4><p>{{.Hotel.Address}}, {{.Hotel.City}}, Indonesia. Dekat pusat kuliner dan transportasi publik.</p></div>
+    <div><h4>Fasilitas Utama</h4><p>WiFi · Resepsionis 24 Jam · Parkir · Lift · AC.</p></div>
+  </div>
+  <div class="long-description">
+    <p>{{.Hotel.Name}} adalah hotel bintang dua yang dikenal dengan konsep modern-minimalis, lokasi strategis, dan pelayanan yang konsisten ramah. Properti ini cocok untuk tamu bisnis, pasangan, maupun keluarga kecil yang mencari akomodasi nyaman dengan akses mudah ke pusat kota.</p>
+    <p>Setiap area hotel dirancang untuk pengalaman menginap yang praktis: proses check-in cepat, staf front office aktif membantu kebutuhan tamu, serta kamar yang rutin dibersihkan setiap hari. Dengan akses ke kuliner, pusat belanja, dan transportasi publik, hotel ini menjadi salah satu pilihan favorit untuk perjalanan singkat maupun menginap beberapa malam.</p>
+    <p>Dari sisi kenyamanan, tamu akan mendapatkan fasilitas penting seperti WiFi stabil, AC dingin, layanan resepsionis 24 jam, dan area parkir. Pada tipe Deluxe, tersedia beberapa paket berbeda agar tamu bisa menyesuaikan kebutuhan perjalanan—mulai dari paket hemat hingga paket sarapan dan fleksibilitas perubahan jadwal.</p>
+  </div>
+</section>
+
+<section id="kamar" class="info-section scroll-animate">
+  <h2>Tipe Kamar Deluxe di {{.Hotel.Name}}</h2>
+  <p class="platform-note">Pilihan kamar difokuskan ke Deluxe saja, tetap nyaman dipakai di PC, HP, dan tablet.</p>
+  <div class="filter-ribbon">Suka hotel ini? Hemat 10% hingga Rp100rb untuk pemesanan pertamamu.</div>
+  <div class="filter-box">
+    <span>Pembatalan Gratis</span><span>Bayar Dekat Tanggal Menginap</span><span>Extra Benefit</span><span>Sarapan Gratis</span>
+  </div>
+  <div class="deluxe-desc-grid">
+    <div><h4>Deluxe Room Only</h4><p>Cocok untuk tamu yang ingin harga terbaik dengan fasilitas inti lengkap.</p></div>
+    <div><h4>Deluxe + Breakfast</h4><p>Termasuk sarapan 2 orang, ideal untuk staycation keluarga kecil.</p></div>
+    <div><h4>Deluxe Flexi</h4><p>Lebih fleksibel untuk jadwal check-in dan perubahan rencana perjalanan.</p></div>
+  </div>
+  <section id="deluxe" class="room-tab">{{template "rooms" .Deluxe}}</section>
+</section>
+
+<section id="lokasi" class="info-section scroll-animate">
+  <h3>Info Lokasi di sekitar {{.Hotel.Name}}</h3>
+  <p>{{.Hotel.Address}}, {{.Hotel.City}}, Indonesia</p>
+  <iframe src="{{.Hotel.MapEmbedURL}}" loading="lazy"></iframe>
+  <div class="quick-list-grid">
+    <div><h4>Tempat Terdekat</h4><p>Hotel Batara · The Fave Hotel · Apotek Revita</p></div>
+    <div><h4>Transportasi Publik</h4><p>Stasiun Kereta · DayTrans · CitraTrans</p></div>
+    <div><h4>Pusat Hiburan</h4><p>Paris Van Java · Cihampelas Walk · 23 Paskal</p></div>
+  </div>
+</section>
+
+<section id="fasilitas" class="info-section scroll-animate">
+  <h3>Semua Fasilitas di {{.Hotel.Name}}</h3>
+  <div class="facility-photos">
+    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=80" alt="Lobi">
+    <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=80" alt="Bangunan">
+    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?auto=format&fit=crop&w=900&q=80" alt="Kamar Tidur">
+    <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=900&q=80" alt="Lainnya">
+  </div>
+  <div class="quick-list-grid">
+    <div><h4>Fasilitas Terdekat</h4><p>ATM/Bank · Salon · Mini market · Toko oleh-oleh</p></div>
+    <div><h4>Fasilitas Kamar</h4><p>TV kabel · Meja · Brankas · Pancuran</p></div>
+    <div><h4>Servis Hotel</h4><p>Bellboy · Resepsionis 24 jam · Keamanan 24 jam</p></div>
+  </div>
+</section>
+
+<section id="kebijakan" class="info-section scroll-animate">
+  <h3>Kebijakan Akomodasi & Informasi Umum</h3>
+  <p>Check-in: 14:00 · Check-out: 12:00 · Pembatalan mengikuti paket kamar. Maksimal 1 anak di bawah 5 tahun gratis tanpa extra bed.</p>
+</section>
+
+<section id="review" class="info-section scroll-animate">
+  <h3>Review dari Tamu Lainnya</h3>
+  <div class="facility-photos">
+    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80" alt="review 1">
+    <img src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?auto=format&fit=crop&w=800&q=80" alt="review 2">
+    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80" alt="review 3">
+    <img src="https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80" alt="review 4">
+  </div>
+  <p>“Hotelnya bersih, staf ramah, lokasi strategis. Saya pasti balik lagi.”</p>
+  <p>“Kamar sesuai foto, sarapan variatif, dan proses check-in cepat.”</p>
+</section>
+
+<div class="floating-offer">Jangan lewatkan! <strong>Sisa 3 kamar</strong> · Rp 213.268 <a href="#kamar">Kembali ke pilihan kamar</a></div>
+{{end}}
+
+{{define "rooms"}}
+{{if .}}
+<section class="room-choice-layout">
+  <aside class="room-sidebar">
+    <img src="{{(index . 0).FloorMapImage}}" alt="Preview kamar">
+    <h3>{{(index . 0).Type}} Room Highlight</h3>
+    <p>Luas 28m² · cocok untuk perjalanan bisnis & keluarga.</p>
+    <ul>
+      <li>Free WiFi</li>
+      <li>Shower Air Panas</li>
+      <li>AC & Smart TV</li>
+    </ul>
+  </aside>
+  <div class="room-table-wrap">
+    <div class="room-table-head">
+      <span>Pilihan Kamar</span><span>Tamu</span><span>Harga/kamar/malam</span><span>Aksi</span>
+    </div>
+    {{range $i, $room := .}}
+    <div class="room-row">
+      <div>
+        <strong>{{$room.Name}} - {{$room.Type}}</strong> <span class="room-package-tag">{{if eq $i 0}}Room Only{{else if eq $i 1}}Breakfast{{else}}Flexi Deal{{end}}</span>
+        <p>Kasur: {{$room.Beds}} • Kapasitas {{$room.Capacity}} orang</p>
+        <small>{{range $fi, $f := $room.Facilities}}{{if $fi}} • {{end}}{{$f}}{{end}}</small>
+      </div>
+      <div>{{$room.Capacity}} 👤</div>
+      <div>Rp {{$room.PricePerNight}}</div>
+      <div>
+          <form action="/api/book" method="post" class="actions">
+            <input type="hidden" name="room_id" value="{{$room.ID}}">
+            <input type="hidden" name="nights" value="1">
+            <input type="hidden" name="guests" value="{{$room.Capacity}}">
+            <button class="btn" type="submit">Pesan</button>
+            <a class="btn secondary" href="/payment">Bayar</a>
+          </form>
+          <p class="left-stock">Sisa {{$room.Stock}} kamar!</p>
+        </div>
+    </div>
+    {{end}}
+  </div>
+</section>
+{{end}}
+{{end}}
