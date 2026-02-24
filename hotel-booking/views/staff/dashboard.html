@@ -9,22 +9,31 @@
   </div>
 
   <div class="admin-kpi-grid">
-    <article><h4>Total Hotel Terkelola</h4><p>{{len .Hotels}}</p></article>
+    <article><h4>Total Booking</h4><p>{{.BookingsCount}}</p></article>
+    <article><h4>Total Tamu</h4><p>{{.TotalGuests}}</p></article>
+    <article><h4>Total Hari Menginap</h4><p>{{.TotalNights}}</p></article>
     <article><h4>Total Kamar</h4><p>{{len .Rooms}}</p></article>
-    <article><h4>Booking Masuk</h4><p>{{.BookingsCount}}</p></article>
-    <article><h4>Status</h4><p>Operasional</p></article>
+  </div>
+
+  <div class="admin-kpi-grid">
+    <article><h4>Booking Minggu Ini</h4><p>{{.ThisWeekBookings}}</p></article>
+    <article><h4>Tamu Minggu Ini</h4><p>{{.ThisWeekGuests}}</p></article>
+    <article><h4>Hari Menginap Minggu Ini</h4><p>{{.ThisWeekNights}}</p></article>
+    <article><h4>Total Hotel Terkelola</h4><p>{{len .Hotels}}</p></article>
   </div>
 
   <section class="admin-table-wrap">
-    <h3>Ringkasan Hotel</h3>
+    <h3>Riwayat Booking Terbaru</h3>
     <table class="admin-table">
-      <thead><tr><th>Hotel</th><th>Kota</th><th>Aksi Cepat</th></tr></thead>
+      <thead><tr><th>ID Booking</th><th>Tanggal</th><th>Tamu</th><th>Durasi (Hari)</th><th>Status</th></tr></thead>
       <tbody>
-      {{range .Hotels}}
+      {{range .RecentBookings}}
       <tr>
-        <td>{{.Name}}</td>
-        <td>{{.City}}</td>
-        <td><a href="/hotel?id={{.ID}}">Lihat Halaman Hotel</a></td>
+        <td>#{{.ID}}</td>
+        <td>{{.BookedAt}}</td>
+        <td>{{.Guests}} orang</td>
+        <td>{{.Nights}} hari</td>
+        <td>{{.Status}}</td>
       </tr>
       {{end}}
       </tbody>

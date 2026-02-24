@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"time"
 
 	"hotel-booking/models"
 )
@@ -71,6 +72,16 @@ func Seed() *InMemoryDB {
 			)
 			roomID += 3
 		}
+	}
+
+	now := time.Now()
+	db.Bookings = []models.Booking{
+		{ID: 1, UserID: 3, RoomID: 1, Nights: 3, Guests: 2, Total: 6600000, Status: "confirmed", BookedAt: now.AddDate(0, 0, -1)},
+		{ID: 2, UserID: 3, RoomID: 4, Nights: 2, Guests: 1, Total: 2900000, Status: "confirmed", BookedAt: now.AddDate(0, 0, -2)},
+		{ID: 3, UserID: 3, RoomID: 7, Nights: 5, Guests: 3, Total: 10400000, Status: "paid", BookedAt: now.AddDate(0, 0, -3)},
+		{ID: 4, UserID: 3, RoomID: 10, Nights: 1, Guests: 2, Total: 780000, Status: "paid", BookedAt: now.AddDate(0, 0, -5)},
+		{ID: 5, UserID: 3, RoomID: 13, Nights: 4, Guests: 2, Total: 6200000, Status: "confirmed", BookedAt: now.AddDate(0, 0, -8)},
+		{ID: 6, UserID: 3, RoomID: 16, Nights: 2, Guests: 1, Total: 1560000, Status: "pending", BookedAt: now.AddDate(0, 0, -10)},
 	}
 
 	return db
