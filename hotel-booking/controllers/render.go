@@ -6,10 +6,18 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strings"
 )
 
 func render(w http.ResponseWriter, page string, data any) {
 	base := filepath.Join("views", "layout.html")
+	if strings.HasPrefix(page, "admin/") {
+		base = filepath.Join("views", "admin", "layout.html")
+	}
+	if strings.HasPrefix(page, "staff/") {
+		base = filepath.Join("views", "staff", "layout.html")
+	}
+
 	view := filepath.Join("views", page)
 	tmpl, err := template.ParseFiles(base, view)
 	if err != nil {
