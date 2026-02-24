@@ -42,6 +42,7 @@
   </aside>
 
   <div class="hotel-listing split-scroll-pane split-scroll-right" id="hotelListing">
+    <button class="btn mobile-filter-btn" id="mobileFilterBtn">Filter Hotel</button>
     <div class="city-hotel-head">
       <div>
         <h2>{{if .SelectedCity}}Rekomendasi Hotel di {{.SelectedCity}}{{else}}Pemilihan Hotel{{end}}</h2>
@@ -71,6 +72,7 @@
   </div>
 </section>
 
+<div class="filter-drawer-backdrop hidden" id="filterDrawerBackdrop"></div>
 
 <div class="pull-search-handle hidden" id="hotelPullHandle">Tarik pencarian hotel</div>
 <div class="floating-search-sheet hidden" id="floatingSearchSheet">

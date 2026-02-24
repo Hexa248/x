@@ -123,12 +123,15 @@ body.js-animate .scroll-animate.in-view{opacity:1;transform:none}
 .filter-card{background:#fff;border:1px solid #e4ebf7;border-radius:14px;padding:14px;display:grid;gap:8px}
 .filter-card h4{margin:0 0 4px}.filter-card label{display:flex;gap:8px;align-items:center}.filter-card a{color:#1180df;text-decoration:none;font-weight:700}
 .filter-actions{position:sticky;bottom:10px;background:#fff;border:1px solid #e4ebf7;border-radius:14px;padding:10px;display:flex;gap:8px}
+.mobile-filter-btn{display:none;margin-bottom:8px}
+.filter-drawer-backdrop{position:fixed;inset:0;background:rgba(18,35,58,.35);z-index:46}
 .hotel-listing{display:grid;gap:12px}
 .result-card{display:grid;grid-template-columns:280px 1fr 220px;gap:0;background:#fff;border:1px solid #e3eaf7;border-radius:14px;overflow:hidden}
 .result-card img{width:100%;height:100%;min-height:170px;max-height:190px;object-fit:cover}
 .result-main{padding:14px}.result-side{padding:14px;border-left:1px solid #e9effa;display:grid;justify-items:end;align-content:start;gap:6px}
 .muted{color:#5f6f82}.pill{background:#e6f3ff;color:#0870cf;border-radius:8px;padding:4px 8px;font-weight:700}.score{font-size:30px;color:#0a78d8;font-weight:800;margin:0}.price{font-size:32px;color:#ff6b1a;font-weight:800;margin:0}
-@media (max-width:1200px){.hotel-results-layout{grid-template-columns:1fr}.split-scroll-pane{max-height:none;overflow:visible;padding-right:0}.split-scroll-left{position:relative;top:0}.result-card{grid-template-columns:1fr}.result-side{border-left:0;border-top:1px solid #e9effa;justify-items:start}}
+@media (max-width:1200px){.hotel-results-layout{grid-template-columns:1fr}.split-scroll-pane{max-height:none;overflow:visible;padding-right:0}.split-scroll-left{position:relative;top:0}.result-card{grid-template-columns:1fr}.result-side{border-left:0;border-top:1px solid #e9effa;justify-items:start}.mobile-filter-btn{display:inline-block}}
+@media (max-width:900px){#hotelFilterSidebar{position:fixed;left:0;top:0;height:100vh;width:min(82vw,340px);overflow:auto;transform:translateX(-102%);transition:transform .25s ease;z-index:47;border-radius:0;padding:12px;background:#f4f8ff}body.filter-drawer-open #hotelFilterSidebar{transform:translateX(0)}body.filter-drawer-open{overflow:hidden}.filter-actions{position:sticky;bottom:8px}.filter-drawer-backdrop.hidden{display:none}}
 
 .promo-mini{background:linear-gradient(135deg,#0a77d8,#0a5fb8);color:#fff}
 .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mini-grid span{background:#eef5ff;color:#20517f;border-radius:10px;padding:10px 8px;font-weight:700;font-size:13px}

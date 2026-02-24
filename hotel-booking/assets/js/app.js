@@ -228,6 +228,9 @@ if(hotelListing){
   const filterActionText=document.getElementById('filterActionText');
   const filterActionCancel=document.getElementById('filterActionCancel');
   const filterActionConfirm=document.getElementById('filterActionConfirm');
+  const mobileFilterBtn=document.getElementById('mobileFilterBtn');
+  const filterDrawerBackdrop=document.getElementById('filterDrawerBackdrop');
+  const hotelFilterSidebar=document.getElementById('hotelFilterSidebar');
   const priceMin=document.getElementById('priceMin');
   const priceMax=document.getElementById('priceMax');
   const priceMinLabel=document.getElementById('priceMinLabel');
@@ -392,6 +395,30 @@ if(hotelListing){
     });
   });
 
+  const openFilterDrawer=()=>{ document.body.classList.add('filter-drawer-open'); filterDrawerBackdrop?.classList.remove('hidden'); };
+  const closeFilterDrawer=()=>{ document.body.classList.remove('filter-drawer-open'); filterDrawerBackdrop?.classList.add('hidden'); };
+  mobileFilterBtn?.addEventListener('click', openFilterDrawer);
+  filterDrawerBackdrop?.addEventListener('click', closeFilterDrawer);
+
+  let touchStartX=0;
+  let touchCurrentX=0;
+  let fromEdge=false;
+
+  window.addEventListener('touchstart',(e)=>{
+    touchStartX=e.touches[0].clientX;
+    touchCurrentX=touchStartX;
+    fromEdge=touchStartX < 24;
+  },{passive:true});
+
+  window.addEventListener('touchmove',(e)=>{ touchCurrentX=e.touches[0].clientX; },{passive:true});
+
+  window.addEventListener('touchend',()=>{
+    const delta=touchCurrentX-touchStartX;
+    if(window.innerWidth>900) return;
+    if(fromEdge && delta>70) openFilterDrawer();
+    if(document.body.classList.contains('filter-drawer-open') && delta<-60) closeFilterDrawer();
+  },{passive:true});
+
   const doResetFilters=()=>{
     state.city='';
     state.minPrice=100000;
@@ -477,6 +504,7 @@ if(hotelListing){
     if(action==='reset') doResetFilters();
     if(action==='apply') applyFilters();
     closeFilterActionPopup();
+    closeFilterDrawer();
   });
 
   let lastWindowY=window.scrollY;
@@ -502,6 +530,7 @@ if(hotelListing){
   });
 
   window.addEventListener('scroll', updateTopbarAndPull, {passive:true});
+  window.addEventListener('resize',()=>{ if(window.innerWidth>900) closeFilterDrawer(); });
   updateTopbarAndPull();
 
   refreshSearchInputs();
