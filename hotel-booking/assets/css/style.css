@@ -9,6 +9,15 @@
 .search-panel.compact{margin:0 0 16px}
 .field{display:grid;gap:5px}.field label{font-size:13px;font-weight:700}.field input{width:100%;padding:11px;border:1px solid #cfd7e6;border-radius:12px;background:#fbfdff}
 .search-btn{border-radius:24px;padding:0 24px;min-height:44px;align-self:end}
+.smart-search-strip{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:10px;background:#fff;border:1px solid #dbe5f6;border-radius:14px;padding:10px;margin:0 0 12px}
+.smart-chip{border:1px solid #c9d8ef;background:#fff;color:#284562;border-radius:10px;padding:10px 12px;text-align:left;font-weight:700;cursor:pointer}
+.smart-search-btn{min-height:42px;border-radius:10px}
+.pull-search-handle{position:fixed;top:12px;right:12px;z-index:55;background:#0a77d8;color:#fff;padding:8px 12px;border-radius:999px;box-shadow:0 6px 16px rgba(10,119,216,.35);font-size:13px;font-weight:700;cursor:pointer;transition:all .25s ease}
+.floating-search-sheet{position:fixed;top:58px;left:12px;right:12px;z-index:54;background:#fff;border:1px solid #d8e4f6;border-radius:14px;padding:10px;box-shadow:0 12px 30px rgba(18,64,138,.2)}
+.floating-search-head{font-weight:800;margin-bottom:8px}
+.floating-search-grid{display:grid;gap:8px}
+body.topbar-hidden .topbar{transform:translateY(-105%)}
+.topbar{transition:transform .25s ease}
 .home-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:10px 0 20px}.home-grid iframe{width:100%;height:220px;border:0;border-radius:12px}
 .map-small{align-self:start}.comment-box{background:#fff;border-radius:12px;padding:12px;box-shadow:0 5px 20px rgba(20,65,150,.07)}
 .city-cards,.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:18px}
@@ -53,7 +62,7 @@
 .detail-hero-grid{display:grid;grid-template-columns:2fr 1.3fr;gap:8px}.detail-hero-grid>img{width:100%;height:320px;object-fit:cover;border-radius:12px}.detail-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.detail-mini-grid img{width:100%;height:156px;object-fit:cover;border-radius:12px}
 .info-section{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 4px 15px rgba(33,92,173,.06);scroll-margin-top:130px}
 .info-section iframe{width:100%;height:240px;border:0;border-radius:10px}
-@media (max-width:900px){.search-panel{grid-template-columns:1fr;margin:0 0 14px}.home-grid,.room-choice-layout,.detail-hero-grid{grid-template-columns:1fr}.detail-mini-grid img{height:120px}.topbar{padding:10px 12px}.topbar nav a{font-size:13px;margin-left:8px}.hotel-card img,.room-card img{height:130px}.city-hero{min-height:140px}.sticky-tabs{top:52px;padding:10px 12px;gap:10px}.sticky-tabs.is-docked{padding-left:12px;padding-right:12px}.sticky-tabs-actions{display:none}.payment-footer{align-items:flex-start}}
+@media (max-width:900px){.search-panel{grid-template-columns:1fr;margin:0 0 14px}.smart-search-strip{grid-template-columns:1fr}.home-grid,.room-choice-layout,.detail-hero-grid{grid-template-columns:1fr}.detail-mini-grid img{height:120px}.topbar{padding:10px 12px}.topbar nav{display:flex;flex-wrap:wrap;justify-content:flex-end;row-gap:4px}.topbar nav a{font-size:13px;margin-left:8px}.hotel-card img,.room-card img{height:130px}.city-hero{min-height:140px}.sticky-tabs{top:52px;padding:10px 12px;gap:10px}.sticky-tabs.is-docked{padding-left:12px;padding-right:12px}.sticky-tabs-actions{display:none}.payment-footer{align-items:flex-start}}
 
 .recommendation-head{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 5px 18px rgba(20,65,150,.06)}
 .reco-layout{display:grid;grid-template-columns:260px 1fr;gap:12px}
@@ -134,3 +143,5 @@ body.js-animate .scroll-animate.in-view{opacity:1;transform:none}
 .filter-action-popup-content p{margin:0;color:#5f6f82}
 #hotelEmptyState{background:#fff;border:1px dashed #c9d6ea;border-radius:12px;padding:14px}
 
+
+@media (min-width:901px){.pull-search-handle,.floating-search-sheet{display:none !important}}

@@ -15,6 +15,13 @@
   <button class="btn search-btn" id="searchHotelsBtn">Cari</button>
 </section>
 
+<section class="smart-search-strip" id="smartSearchStrip">
+  <button class="smart-chip" data-open="city">📍 <span id="smartCityText">{{if .SelectedCity}}{{.SelectedCity}}{{else}}Pilih Kota{{end}}</span></button>
+  <button class="smart-chip" data-open="date">📅 <span id="smartDateText">25 Feb - 26 Feb, 1 malam</span></button>
+  <button class="smart-chip" data-open="guest">👥 <span id="smartGuestText">2 Dewasa, 1 Kamar</span></button>
+  <button class="btn smart-search-btn" id="smartSearchBtn">Search Hotels</button>
+</section>
+
 <section class="hotel-results-layout" id="hotelResultsLayout">
   <aside class="filter-sidebar split-scroll-pane split-scroll-left" id="hotelFilterSidebar">
     <div class="filter-card promo-mini"><p><strong>Dapatkan diskon 8%</strong><br/>s.d. Rp100.000!<br/>Gunakan kode "JALANYUK".</p></div>
@@ -63,6 +70,18 @@
     <p id="hotelEmptyState" class="muted hidden">Tidak ada hotel yang cocok dengan filter saat ini.</p>
   </div>
 </section>
+
+
+<div class="pull-search-handle hidden" id="hotelPullHandle">Tarik pencarian hotel</div>
+<div class="floating-search-sheet hidden" id="floatingSearchSheet">
+  <div class="floating-search-head">Pencarian Cepat</div>
+  <div class="floating-search-grid">
+    <button class="smart-chip" data-open="city">📍 <span id="floatCityText">Pilih Kota</span></button>
+    <button class="smart-chip" data-open="date">📅 <span id="floatDateText">Check-in / Check-out</span></button>
+    <button class="smart-chip" data-open="guest">👥 <span id="floatGuestText">Tamu & Kamar</span></button>
+    <button class="btn smart-search-btn" id="floatSearchBtn">Search Hotels</button>
+  </div>
+</div>
 
 <div id="hotel-search-popup" class="popup hidden">
   <div class="popup-content hotel-popup-content">

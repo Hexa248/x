@@ -208,6 +208,11 @@ if(hotelListing){
   const dateInputHotels=document.getElementById('dateInputHotels');
   const guestInputHotels=document.getElementById('guestInputHotels');
   const searchHotelsBtn=document.getElementById('searchHotelsBtn');
+  const smartSearchBtn=document.getElementById('smartSearchBtn');
+  const floatSearchBtn=document.getElementById('floatSearchBtn');
+  const smartSearchStrip=document.getElementById('smartSearchStrip');
+  const hotelPullHandle=document.getElementById('hotelPullHandle');
+  const floatingSearchSheet=document.getElementById('floatingSearchSheet');
   const cards=[...hotelListing.querySelectorAll('.result-card')];
   const summary=document.getElementById('hotelResultSummary');
   const emptyState=document.getElementById('hotelEmptyState');
@@ -227,6 +232,12 @@ if(hotelListing){
   const priceMax=document.getElementById('priceMax');
   const priceMinLabel=document.getElementById('priceMinLabel');
   const priceMaxLabel=document.getElementById('priceMaxLabel');
+  const smartCityText=document.getElementById('smartCityText');
+  const smartDateText=document.getElementById('smartDateText');
+  const smartGuestText=document.getElementById('smartGuestText');
+  const floatCityText=document.getElementById('floatCityText');
+  const floatDateText=document.getElementById('floatDateText');
+  const floatGuestText=document.getElementById('floatGuestText');
 
   const formatIDR=(v)=>`IDR ${Number(v).toLocaleString('id-ID')}`;
   const state={
@@ -241,9 +252,18 @@ if(hotelListing){
   };
 
   const refreshSearchInputs=()=>{
+    const cityText=state.city || 'Pilih Kota';
+    const dateText=`${state.checkIn} - ${state.checkOut}`;
+    const guestText=`${state.adults} Dewasa, ${state.children} Anak, ${state.rooms} Kamar`;
     if(cityInputHotels) cityInputHotels.value=state.city ? `${state.city}, Indonesia` : '';
-    if(dateInputHotels) dateInputHotels.value=`${state.checkIn} - ${state.checkOut}`;
-    if(guestInputHotels) guestInputHotels.value=`${state.adults} Dewasa, ${state.children} Anak, ${state.rooms} Kamar`;
+    if(dateInputHotels) dateInputHotels.value=dateText;
+    if(guestInputHotels) guestInputHotels.value=guestText;
+    if(smartCityText) smartCityText.textContent=cityText;
+    if(smartDateText) smartDateText.textContent=dateText;
+    if(smartGuestText) smartGuestText.textContent=guestText;
+    if(floatCityText) floatCityText.textContent=cityText;
+    if(floatDateText) floatDateText.textContent=dateText;
+    if(floatGuestText) floatGuestText.textContent=guestText;
   };
 
   const openPopup=(kind)=>{
@@ -329,6 +349,10 @@ if(hotelListing){
   guestInputHotels?.addEventListener('click',()=>openPopup('guest'));
   popupCancel?.addEventListener('click', closePopup);
   popup?.addEventListener('click',(e)=>{ if(e.target===popup) closePopup(); });
+
+  document.querySelectorAll('[data-open]').forEach(el=>{
+    el.addEventListener('click',()=>openPopup(el.dataset.open));
+  });
 
   popupApply?.addEventListener('click',()=>{
     const kind=popup?.dataset.kind;
@@ -441,6 +465,8 @@ if(hotelListing){
   [priceMin, priceMax].forEach(el=>el?.addEventListener('input',applyFilters));
   document.querySelectorAll('input[data-filter]').forEach(el=>el.addEventListener('change',applyFilters));
   searchHotelsBtn?.addEventListener('click',applyFilters);
+  smartSearchBtn?.addEventListener('click',applyFilters);
+  floatSearchBtn?.addEventListener('click',applyFilters);
   applyFiltersBtn?.addEventListener('click',()=>openFilterActionPopup('apply'));
   resetFiltersBtn?.addEventListener('click',()=>openFilterActionPopup('reset'));
 
@@ -452,6 +478,31 @@ if(hotelListing){
     if(action==='apply') applyFilters();
     closeFilterActionPopup();
   });
+
+  let lastWindowY=window.scrollY;
+  const updateTopbarAndPull=()=>{
+    const topbar=document.querySelector('.topbar');
+    if(!topbar) return;
+    const y=window.scrollY;
+    const nearTop=y < 24;
+    const scrollingDown=y > lastWindowY;
+    if(nearTop || !scrollingDown){
+      document.body.classList.remove('topbar-hidden');
+      hotelPullHandle?.classList.add('hidden');
+      floatingSearchSheet?.classList.add('hidden');
+    }else{
+      document.body.classList.add('topbar-hidden');
+      hotelPullHandle?.classList.remove('hidden');
+    }
+    lastWindowY=y;
+  };
+
+  hotelPullHandle?.addEventListener('click',()=>{
+    floatingSearchSheet?.classList.toggle('hidden');
+  });
+
+  window.addEventListener('scroll', updateTopbarAndPull, {passive:true});
+  updateTopbarAndPull();
 
   refreshSearchInputs();
   applyFilters();
