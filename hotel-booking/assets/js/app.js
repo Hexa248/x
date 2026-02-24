@@ -49,16 +49,26 @@ if(sections.length && tabs.length){
     sticky.classList.toggle('is-docked', window.scrollY > trigger);
   };
 
-  const moveIndicator=()=>{
-    if(!indicator || !tabsTrack) return;
+  const moveIndicator=(animated=true)=>{
+    if(!tabsTrack) return;
     const active=tabsTrack.querySelector('.tab-anchor.active');
     if(!active){
-      indicator.style.width='0px';
+      if(indicator) indicator.style.width='0px';
       return;
     }
-    indicator.style.width=`${active.offsetWidth}px`;
-    indicator.style.transform=`translateX(${active.offsetLeft}px)`;
+    if(indicator){
+      indicator.style.width=`${active.offsetWidth}px`;
+      indicator.style.transform=`translateX(${active.offsetLeft}px)`;
+    }
+
+    const targetLeft=active.offsetLeft - (tabsTrack.clientWidth/2) + (active.offsetWidth/2);
+    tabsTrack.scrollTo({
+      left:Math.max(0,targetLeft),
+      behavior:animated ? 'smooth' : 'auto'
+    });
   };
+
+  let lastActiveId='';
 
   const updateActiveTab=()=>{
     const headerOffset=(sticky ? sticky.offsetHeight : 0) + 14;
@@ -74,7 +84,9 @@ if(sections.length && tabs.length){
     tabs.forEach(t=>t.classList.remove('active'));
     const active=document.querySelector(`.tab-anchor[href="#${current.id}"]`);
     if(active) active.classList.add('active');
-    moveIndicator();
+    const changed=lastActiveId!==current.id;
+    lastActiveId=current.id;
+    moveIndicator(changed);
   };
 
   const smoothTargets=document.querySelectorAll('.tab-anchor, .sticky-tabs-actions a[href^="#"]');
@@ -92,7 +104,7 @@ if(sections.length && tabs.length){
   });
 
   window.addEventListener('scroll', ()=>{ updateDockedState(); updateActiveTab(); }, {passive:true});
-  window.addEventListener('resize', ()=>{ updateDockedState(); moveIndicator(); updateActiveTab(); });
+  window.addEventListener('resize', ()=>{ updateDockedState(); moveIndicator(false); updateActiveTab(); });
   updateDockedState();
   updateActiveTab();
 }
