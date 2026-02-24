@@ -1,0 +1,26 @@
+{{define "content"}}
+<section class="admin-shell">
+  <div class="admin-head">
+    <h2>Manajemen User</h2>
+    <div class="actions">
+      <a class="btn secondary" href="/admin">Kembali ke Admin</a>
+      <a class="btn" href="/staff">Lihat Staff</a>
+    </div>
+  </div>
+  <section class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>ID</th><th>Nama</th><th>Email</th><th>Role</th></tr></thead>
+      <tbody>
+      {{range .Users}}
+      <tr>
+        <td>{{.ID}}</td>
+        <td>{{.Name}}</td>
+        <td>{{.Email}}</td>
+        <td>{{.Role}}</td>
+      </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+</section>
+{{end}}
