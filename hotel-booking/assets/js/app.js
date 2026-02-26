@@ -132,7 +132,11 @@ const animatedEls=document.querySelectorAll('.scroll-animate');
 if(animatedEls.length){
   const animObserver=new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
-      if(entry.isIntersecting) entry.target.classList.add('in-view');
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+      }else{
+        entry.target.classList.remove('in-view');
+      }
     });
   },{threshold:0.18});
   animatedEls.forEach(el=>animObserver.observe(el));
@@ -205,9 +209,6 @@ function renderCityHotels(city){
 const hotelListing=document.getElementById('hotelListing');
 if(hotelListing){
   const cityInputHotels=document.getElementById('cityInputHotels');
-  const dateInputHotels=document.getElementById('dateInputHotels');
-  const guestInputHotels=document.getElementById('guestInputHotels');
-  const searchHotelsBtn=document.getElementById('searchHotelsBtn');
   const smartSearchBtn=document.getElementById('smartSearchBtn');
   const floatSearchBtn=document.getElementById('floatSearchBtn');
   const smartSearchStrip=document.getElementById('smartSearchStrip');
@@ -235,7 +236,6 @@ if(hotelListing){
   const priceMax=document.getElementById('priceMax');
   const priceMinLabel=document.getElementById('priceMinLabel');
   const priceMaxLabel=document.getElementById('priceMaxLabel');
-  const smartCityText=document.getElementById('smartCityText');
   const smartDateText=document.getElementById('smartDateText');
   const smartGuestText=document.getElementById('smartGuestText');
   const floatCityText=document.getElementById('floatCityText');
@@ -244,7 +244,7 @@ if(hotelListing){
 
   const formatIDR=(v)=>`IDR ${Number(v).toLocaleString('id-ID')}`;
   const state={
-    city:(cityInputHotels?.value||'').replace(', Indonesia','').trim(),
+    city:(cityInputHotels?.value||'').trim(),
     checkIn:'Min, 22 Feb 2026',
     checkOut:'Sen, 23 Feb 2026',
     adults:2,
@@ -258,10 +258,7 @@ if(hotelListing){
     const cityText=state.city || 'Pilih Kota';
     const dateText=`${state.checkIn} - ${state.checkOut}`;
     const guestText=`${state.adults} Dewasa, ${state.children} Anak, ${state.rooms} Kamar`;
-    if(cityInputHotels) cityInputHotels.value=state.city ? `${state.city}, Indonesia` : '';
-    if(dateInputHotels) dateInputHotels.value=dateText;
-    if(guestInputHotels) guestInputHotels.value=guestText;
-    if(smartCityText) smartCityText.textContent=cityText;
+    if(cityInputHotels) cityInputHotels.value=state.city;
     if(smartDateText) smartDateText.textContent=dateText;
     if(smartGuestText) smartGuestText.textContent=guestText;
     if(floatCityText) floatCityText.textContent=cityText;
@@ -347,9 +344,6 @@ if(hotelListing){
     if(emptyState) emptyState.classList.toggle('hidden', visible>0);
   };
 
-  cityInputHotels?.addEventListener('click',()=>openPopup('city'));
-  dateInputHotels?.addEventListener('click',()=>openPopup('date'));
-  guestInputHotels?.addEventListener('click',()=>openPopup('guest'));
   popupCancel?.addEventListener('click', closePopup);
   popup?.addEventListener('click',(e)=>{ if(e.target===popup) closePopup(); });
 
@@ -357,11 +351,18 @@ if(hotelListing){
     el.addEventListener('click',()=>openPopup(el.dataset.open));
   });
 
+  cityInputHotels?.addEventListener('input',(e)=>{
+    state.city=(e.target.value||'').trim();
+    if(floatCityText) floatCityText.textContent=state.city || 'Pilih Kota';
+    applyFilters();
+  });
+
   popupApply?.addEventListener('click',()=>{
     const kind=popup?.dataset.kind;
     if(kind==='city'){
       const value=document.getElementById('popupCityValue');
       state.city=(value?.value||'').trim();
+      if(cityInputHotels) cityInputHotels.value=state.city;
     }
     if(kind==='date'){
       const ci=document.getElementById('popupCheckIn');
@@ -491,7 +492,6 @@ if(hotelListing){
 
   [priceMin, priceMax].forEach(el=>el?.addEventListener('input',applyFilters));
   document.querySelectorAll('input[data-filter]').forEach(el=>el.addEventListener('change',applyFilters));
-  searchHotelsBtn?.addEventListener('click',applyFilters);
   smartSearchBtn?.addEventListener('click',applyFilters);
   floatSearchBtn?.addEventListener('click',applyFilters);
   applyFiltersBtn?.addEventListener('click',()=>openFilterActionPopup('apply'));

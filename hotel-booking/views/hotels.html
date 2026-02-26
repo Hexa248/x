@@ -1,24 +1,11 @@
 {{define "content"}}
-<section class="search-panel compact" id="hotelSearchPanel">
-  <div class="field">
-    <label>Kota, tujuan, atau nama hotel</label>
-    <input id="cityInputHotels" value="{{if .SelectedCity}}{{.SelectedCity}}, Indonesia{{end}}" placeholder="Pilih kota dari beranda atau cari nama hotel" readonly>
-  </div>
-  <div class="field">
-    <label>Tanggal Check-in & Check-out</label>
-    <input id="dateInputHotels" value="Min, 22 Feb 2026 - Sen, 23 Feb 2026" readonly>
-  </div>
-  <div class="field">
-    <label>Tamu dan Kamar</label>
-    <input id="guestInputHotels" value="2 Dewasa, 0 Anak, 1 Kamar" readonly>
-  </div>
-  <button class="btn search-btn" id="searchHotelsBtn">Cari</button>
-</section>
-
-<section class="smart-search-strip" id="smartSearchStrip">
-  <button class="smart-chip" data-open="city">📍 <span id="smartCityText">{{if .SelectedCity}}{{.SelectedCity}}{{else}}Pilih Kota{{end}}</span></button>
-  <button class="smart-chip" data-open="date">📅 <span id="smartDateText">25 Feb - 26 Feb, 1 malam</span></button>
-  <button class="smart-chip" data-open="guest">👥 <span id="smartGuestText">2 Dewasa, 1 Kamar</span></button>
+<section class="smart-search-strip smart-search-form" id="smartSearchStrip">
+  <label class="smart-input">
+    <span>📍</span>
+    <input id="cityInputHotels" value="{{if .SelectedCity}}{{.SelectedCity}}{{end}}" placeholder="Kota, tujuan, atau nama hotel">
+  </label>
+  <button class="smart-chip" data-open="date">📅 <span id="smartDateText">Min, 22 Feb 2026 - Sen, 23 Feb 2026</span></button>
+  <button class="smart-chip" data-open="guest">👥 <span id="smartGuestText">2 Dewasa, 0 Anak, 1 Kamar</span></button>
   <button class="btn smart-search-btn" id="smartSearchBtn">Search Hotels</button>
 </section>
 

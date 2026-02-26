@@ -116,7 +116,7 @@
       <span>Pilihan Kamar</span><span>Tamu</span><span>Harga/kamar/malam</span><span>Aksi</span>
     </div>
     {{range $i, $room := .}}
-    <div class="room-row">
+    <div class="room-row scroll-animate">
       <div>
         <strong>{{$room.Name}} - {{$room.Type}}</strong> <span class="room-package-tag">{{if eq $i 0}}Room Only{{else if eq $i 1}}Breakfast{{else}}Flexi Deal{{end}}</span>
         <p>Kasur: {{$room.Beds}} • Kapasitas {{$room.Capacity}} orang</p>
