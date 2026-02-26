@@ -31,10 +31,113 @@ cityCards.forEach(card=>card.addEventListener('click',()=>{
   const cityInputHotels=document.getElementById('cityInputHotels');
   if(hero && image){ hero.style.backgroundImage=`linear-gradient(120deg, rgba(14,77,146,.84), rgba(0,169,255,.75)), url('${image}')`; }
   if(mapFrame && map){ mapFrame.src=map; }
-  if(cityInput) cityInput.value=`${city}, Indonesia`;
+  if(cityInput) cityInput.textContent=city;
   renderCityHotels(city);
-  if(cityInputHotels) cityInputHotels.value=`${city}, Indonesia`;
+  if(cityInputHotels) cityInputHotels.value=city;
 }));
+
+
+
+const homeCityLauncher=document.getElementById('homeCityLauncher');
+const homeSearchPopup=document.getElementById('home-search-popup');
+const homeSearchInput=document.getElementById('homeSearchInput');
+const homeSearchSuggestionList=document.getElementById('homeSearchSuggestionList');
+const homeSearchCloseBtn=document.getElementById('homeSearchCloseBtn');
+const homeSearchBtn=document.getElementById('homeSearchBtn');
+const homeSelectedLabel=document.getElementById('cityInput');
+if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestionList){
+  const defaultCities=['Bandung','Balikpapan'];
+  const roomSuggestions=['Deluxe Room','Family Room','Suite Room','Twin Room'];
+  const homeEntries=[];
+  cityCards.forEach(card=>{
+    const city=(card.dataset.city||'').trim();
+    const hotel=(card.dataset.hotel||'').trim();
+    if(city) homeEntries.push({label:city,type:'city'});
+    if(hotel) homeEntries.push({label:hotel,type:'hotel'});
+  });
+  defaultCities.forEach(city=>homeEntries.push({label:city,type:'city'}));
+  roomSuggestions.forEach(room=>homeEntries.push({label:room,type:'room'}));
+
+  const uniqueEntries=[];
+  const seen=new Set();
+  homeEntries.forEach(entry=>{
+    const key=`${entry.type}:${entry.label.toLowerCase()}`;
+    if(!seen.has(key)){
+      seen.add(key);
+      uniqueEntries.push(entry);
+    }
+  });
+
+  let selectedEntry={label:'',type:'city'};
+
+  const applyHomeCardFilter=(term)=>{
+    const keyword=(term||'').toLowerCase();
+    cityCards.forEach(card=>{
+      const city=(card.dataset.city||'').toLowerCase();
+      const hotel=(card.dataset.hotel||'').toLowerCase();
+      const show=!keyword || city.includes(keyword) || hotel.includes(keyword) || 'deluxe room family room suite room twin room'.includes(keyword);
+      card.classList.toggle('hidden', !show);
+    });
+  };
+
+  const renderHomeSuggestions=(term='')=>{
+    const keyword=term.toLowerCase().trim();
+    const matched=uniqueEntries.filter(item=>!keyword || item.label.toLowerCase().includes(keyword)).slice(0,10);
+    if(!matched.length){
+      homeSearchSuggestionList.innerHTML='<p class="muted">Tidak ada hasil pencarian.</p>';
+      return;
+    }
+
+    homeSearchSuggestionList.innerHTML=matched.map(item=>`
+      <button class="suggestion-item" data-type="${item.type}" data-label="${item.label}" type="button">
+        <span>${item.label}</span>
+        <small>${item.type === 'city' ? 'Kota' : item.type === 'hotel' ? 'Hotel' : 'Kamar'}</small>
+      </button>
+    `).join('');
+
+    homeSearchSuggestionList.querySelectorAll('.suggestion-item').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        selectedEntry={label:btn.dataset.label||'', type:btn.dataset.type||'city'};
+        if(homeSelectedLabel) homeSelectedLabel.textContent=selectedEntry.label;
+        homeSearchInput.value=selectedEntry.label;
+        applyHomeCardFilter(selectedEntry.label);
+      });
+    });
+  };
+
+  const openHomeSearchPopup=()=>{
+    homeSearchPopup.classList.remove('hidden');
+    renderHomeSuggestions(homeSearchInput.value);
+    setTimeout(()=>homeSearchInput.focus(), 0);
+  };
+
+  const closeHomeSearchPopup=()=>homeSearchPopup.classList.add('hidden');
+
+  homeCityLauncher.addEventListener('click',openHomeSearchPopup);
+  homeSearchCloseBtn?.addEventListener('click',closeHomeSearchPopup);
+  homeSearchPopup.addEventListener('click',(e)=>{ if(e.target===homeSearchPopup) closeHomeSearchPopup(); });
+
+  homeSearchInput.addEventListener('input',(e)=>{
+    const value=e.target.value||'';
+    selectedEntry={label:value,type:'city'};
+    if(homeSelectedLabel) homeSelectedLabel.textContent=value || 'Pilih Kota Hotel';
+    renderHomeSuggestions(value);
+    applyHomeCardFilter(value);
+  });
+
+  homeSearchBtn?.addEventListener('click',()=>{
+    const keyword=(selectedEntry.label || homeSearchInput.value || '').trim();
+    if(!keyword) return;
+    const cityMatch=uniqueEntries.find(item=>item.type==='city' && item.label.toLowerCase()===keyword.toLowerCase());
+    if(cityMatch){
+      window.location.href=`/hotels?city=${encodeURIComponent(cityMatch.label)}`;
+      return;
+    }
+    window.location.href=`/hotels?q=${encodeURIComponent(keyword)}`;
+  });
+
+  renderHomeSuggestions('');
+}
 
 const sections=document.querySelectorAll('.info-section');
 const tabs=document.querySelectorAll('.tab-anchor');
@@ -211,7 +314,7 @@ if(hotelListing){
   const cityInputHotels=document.getElementById('cityInputHotels');
   const smartSearchBtn=document.getElementById('smartSearchBtn');
   const floatSearchBtn=document.getElementById('floatSearchBtn');
-  const smartSearchStrip=document.getElementById('smartSearchStrip');
+  const floatFocusHotel=document.getElementById('floatFocusHotel');
   const hotelPullHandle=document.getElementById('hotelPullHandle');
   const floatingSearchSheet=document.getElementById('floatingSearchSheet');
   const cards=[...hotelListing.querySelectorAll('.result-card')];
@@ -261,7 +364,7 @@ if(hotelListing){
     if(cityInputHotels) cityInputHotels.value=state.city;
     if(smartDateText) smartDateText.textContent=dateText;
     if(smartGuestText) smartGuestText.textContent=guestText;
-    if(floatCityText) floatCityText.textContent=cityText;
+    if(floatCityText) floatCityText.textContent=cityText || 'Cari nama hotel';
     if(floatDateText) floatDateText.textContent=dateText;
     if(floatGuestText) floatGuestText.textContent=guestText;
   };
@@ -270,11 +373,6 @@ if(hotelListing){
     if(!popup || !popupBody || !popupTitle) return;
     popup.dataset.kind=kind;
     popupBody.innerHTML='';
-
-    if(kind==='city'){
-      popupTitle.textContent='Pilih Kota atau Nama Hotel';
-      popupBody.innerHTML=`<input id="popupCityValue" placeholder="Contoh: Jakarta atau Nusantara" value="${state.city}" />`;
-    }
 
     if(kind==='date'){
       popupTitle.textContent='Pilih Tanggal Menginap';
@@ -328,7 +426,7 @@ if(hotelListing){
       const star=Number(card.dataset.star||0);
       const price=Number(card.dataset.price||0);
 
-      const cityMatch=!keyword || city.includes(keyword) || name.includes(keyword);
+      const cityMatch=!keyword || name.includes(keyword);
       const starMatch=!stars.length || stars.includes(star);
       const ratingMatch=!ratings.length || ratings.some(r=>rating>=r);
       const priceMatch=price>=state.minPrice && price<=state.maxPrice;
@@ -353,17 +451,17 @@ if(hotelListing){
 
   cityInputHotels?.addEventListener('input',(e)=>{
     state.city=(e.target.value||'').trim();
-    if(floatCityText) floatCityText.textContent=state.city || 'Pilih Kota';
+    if(floatCityText) floatCityText.textContent=state.city || 'Cari nama hotel';
     applyFilters();
+  });
+
+  floatFocusHotel?.addEventListener('click',()=>{
+    cityInputHotels?.focus();
+    cityInputHotels?.scrollIntoView({behavior:'smooth', block:'center'});
   });
 
   popupApply?.addEventListener('click',()=>{
     const kind=popup?.dataset.kind;
-    if(kind==='city'){
-      const value=document.getElementById('popupCityValue');
-      state.city=(value?.value||'').trim();
-      if(cityInputHotels) cityInputHotels.value=state.city;
-    }
     if(kind==='date'){
       const ci=document.getElementById('popupCheckIn');
       const co=document.getElementById('popupCheckOut');

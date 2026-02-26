@@ -2,7 +2,7 @@
 <section class="smart-search-strip smart-search-form" id="smartSearchStrip">
   <label class="smart-input">
     <span>📍</span>
-    <input id="cityInputHotels" value="{{if .SelectedCity}}{{.SelectedCity}}{{end}}" placeholder="Kota, tujuan, atau nama hotel">
+    <input id="cityInputHotels" value="{{if .SelectedCity}}{{.SelectedCity}}{{end}}" placeholder="Cari nama hotel">
   </label>
   <button class="smart-chip" data-open="date">📅 <span id="smartDateText">Min, 22 Feb 2026 - Sen, 23 Feb 2026</span></button>
   <button class="smart-chip" data-open="guest">👥 <span id="smartGuestText">2 Dewasa, 0 Anak, 1 Kamar</span></button>
@@ -65,7 +65,7 @@
 <div class="floating-search-sheet hidden" id="floatingSearchSheet">
   <div class="floating-search-head">Pencarian Cepat</div>
   <div class="floating-search-grid">
-    <button class="smart-chip" data-open="city">📍 <span id="floatCityText">Pilih Kota</span></button>
+    <button class="smart-chip" id="floatFocusHotel">🏨 <span id="floatCityText">Cari nama hotel</span></button>
     <button class="smart-chip" data-open="date">📅 <span id="floatDateText">Check-in / Check-out</span></button>
     <button class="smart-chip" data-open="guest">👥 <span id="floatGuestText">Tamu & Kamar</span></button>
     <button class="btn smart-search-btn" id="floatSearchBtn">Search Hotels</button>

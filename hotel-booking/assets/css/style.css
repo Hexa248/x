@@ -148,6 +148,12 @@ body.js-animate .room-row.scroll-animate.in-view{opacity:1;transform:none}
 #hotelFilterSidebar input[type="range"]{width:100%}
 .hotel-popup-content{min-width:320px;max-width:460px;display:grid;gap:8px}
 .hotel-popup-content input{width:100%;padding:10px;border:1px solid #ccd8ea;border-radius:10px}
+.home-search-popup-content{min-width:320px;max-width:520px;display:grid;gap:10px}
+.home-search-popup-content input{width:100%;padding:11px;border:1px solid #ccd8ea;border-radius:10px;font-size:16px}
+.suggestion-list{display:grid;gap:8px;max-height:300px;overflow:auto}
+.suggestion-item{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid #d6e2f3;border-radius:10px;background:#f9fcff;padding:10px 12px;cursor:pointer;color:#27435f;font-weight:700;text-align:left}
+.suggestion-item small{color:#5f6f82;font-weight:600}
+.suggestion-item:hover{background:#e8f3ff;border-color:#99c4ef}
 .filter-action-popup-content{min-width:300px;max-width:420px;display:grid;gap:10px;transition:transform .2s ease}
 .filter-action-popup-content p{margin:0;color:#5f6f82}
 #hotelEmptyState{background:#fff;border:1px dashed #c9d6ea;border-radius:12px;padding:14px}

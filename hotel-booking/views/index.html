@@ -7,13 +7,10 @@
 </section>
 
 <section class="smart-search-strip home-search-strip">
-  <label class="smart-input">
-    <span>📍</span>
-    <input id="cityInput" value="" placeholder="Kota, tujuan, atau nama hotel" readonly>
-  </label>
-  <button class="smart-chip" type="button">📅 Min, 22 Feb 2026 - Sen, 23 Feb 2026</button>
-  <button class="smart-chip" type="button">👥 2 Dewasa, 0 Anak, 1 Kamar</button>
-  <button class="btn smart-search-btn" type="button">Cari</button>
+  <button class="smart-chip" id="homeCityLauncher" type="button">📍 <span id="cityInput">Pilih Kota Hotel</span></button>
+  <button class="smart-chip" id="homeDateChip" type="button">📅 Min, 22 Feb 2026 - Sen, 23 Feb 2026</button>
+  <button class="smart-chip" id="homeGuestChip" type="button">👥 2 Dewasa, 0 Anak, 1 Kamar</button>
+  <button class="btn smart-search-btn" id="homeSearchBtn" type="button">Cari</button>
 </section>
 
 <section class="home-grid">
@@ -30,9 +27,9 @@
 </section>
 
 <h3>Kota Populer Indonesia</h3>
-<section class="city-cards">
+<section class="city-cards" id="homeCityCards">
 {{range .Hotels}}
-  <a class="city-card city-link" href="/hotels?city={{.City}}" data-city="{{.City}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
+  <a class="city-card city-link" href="/hotels?city={{.City}}" data-city="{{.City}}" data-hotel="{{.Name}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
     <img src="{{.Image}}" alt="{{.City}}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/cityfallback/1200/800'">
     <div class="city-overlay">
       <h4>{{.City}}</h4>
@@ -41,6 +38,17 @@
   </a>
 {{end}}
 </section>
+
+<div id="home-search-popup" class="popup hidden">
+  <div class="popup-content home-search-popup-content">
+    <h3>Pilih Kota Hotel</h3>
+    <input id="homeSearchInput" placeholder="Cari kota, hotel, atau kamar" autocomplete="off">
+    <div id="homeSearchSuggestionList" class="suggestion-list"></div>
+    <div class="actions">
+      <button class="btn secondary" id="homeSearchCloseBtn" type="button">Tutup</button>
+    </div>
+  </div>
+</div>
 
 <div id="hotel-popup" class="popup hidden"><div class="popup-content"><p id="popup-text"></p><button onclick="closePopup()">Tutup</button></div></div>
 {{end}}
