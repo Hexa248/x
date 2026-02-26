@@ -42,10 +42,18 @@ const homeCityLauncher=document.getElementById('homeCityLauncher');
 const homeSearchPopup=document.getElementById('home-search-popup');
 const homeSearchInput=document.getElementById('homeSearchInput');
 const homeSearchSuggestionList=document.getElementById('homeSearchSuggestionList');
-const homeSearchCloseBtn=document.getElementById('homeSearchCloseBtn');
 const homeSearchBtn=document.getElementById('homeSearchBtn');
 const homeSelectedLabel=document.getElementById('cityInput');
 if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestionList){
+  const cityMeta={
+    'Bandung':{subtitle:'Jawa Barat, Indonesia',hotels:'4.810 hotel'},
+    'Balikpapan':{subtitle:'Kalimantan Timur, Indonesia',hotels:'1.240 hotel'},
+    'Banda Aceh':{subtitle:'Aceh, Indonesia',hotels:'560 hotel'},
+    'Banjarbaru':{subtitle:'Kalimantan Selatan, Indonesia',hotels:'320 hotel'},
+    'Banjarmasin':{subtitle:'Kalimantan Selatan, Indonesia',hotels:'790 hotel'},
+    'Batam':{subtitle:'Kepulauan Riau, Indonesia',hotels:'2.050 hotel'}
+  };
+
   const defaultCities=[
     'Bandung','Balikpapan','Banda Aceh','Banjarbaru','Banjarmasin','Batam','Bogor','Cirebon',
     'Denpasar','Jakarta','Jayapura','Kupang','Makassar','Malang','Manado','Medan','Padang',
@@ -53,12 +61,14 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
   ];
   const roomSuggestions=['Deluxe Room','Family Room','Suite Room','Twin Room'];
   const homeEntries=[];
+
   cityCards.forEach(card=>{
     const city=(card.dataset.city||'').trim();
     const hotel=(card.dataset.hotel||'').trim();
     if(city) homeEntries.push({label:city,type:'city'});
     if(hotel) homeEntries.push({label:hotel,type:'hotel'});
   });
+
   defaultCities.forEach(city=>homeEntries.push({label:city,type:'city'}));
   roomSuggestions.forEach(room=>homeEntries.push({label:room,type:'room'}));
 
@@ -88,10 +98,18 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
     const text=item.label.toLowerCase();
     if(!keyword) return item.type==='city' ? 0 : item.type==='hotel' ? 1 : 2;
     const starts=text.startsWith(keyword);
-    const contains=text.includes(keyword);
-    if(!contains) return 999;
+    if(!text.includes(keyword)) return 999;
     const typeBoost=item.type==='city' ? 0 : item.type==='hotel' ? 1 : 2;
     return (starts ? 0 : 10) + typeBoost;
+  };
+
+  const detailOf=(item)=>{
+    if(item.type==='city'){
+      const meta=cityMeta[item.label] || {subtitle:'Indonesia',hotels:'Hotel tersedia'};
+      return {badge:'Kota', subtitle:meta.subtitle, extra:meta.hotels};
+    }
+    if(item.type==='hotel') return {badge:'Hotel', subtitle:'Pilihan properti', extra:'Lihat kamar'};
+    return {badge:'Kamar', subtitle:'Tipe kamar populer', extra:'Tersedia'};
   };
 
   const renderHomeSuggestions=(term='')=>{
@@ -105,17 +123,27 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
         return a.label.localeCompare(b.label,'id');
       })
       .slice(0,10);
+
     if(!matched.length){
       homeSearchSuggestionList.innerHTML='<p class="muted">Tidak ada hasil pencarian.</p>';
       return;
     }
 
-    homeSearchSuggestionList.innerHTML=matched.map(item=>`
-      <button class="suggestion-item" data-type="${item.type}" data-label="${item.label}" type="button">
-        <span>${item.label}</span>
-        <small>${item.type === 'city' ? 'Kota' : item.type === 'hotel' ? 'Hotel' : 'Kamar'}</small>
+    homeSearchSuggestionList.innerHTML=matched.map(item=>{
+      const detail=detailOf(item);
+      return `
+      <button class="suggestion-item suggestion-rich" data-type="${item.type}" data-label="${item.label}" type="button">
+        <div>
+          <strong>${item.label}</strong>
+          <p>${detail.subtitle}</p>
+        </div>
+        <div class="suggestion-meta">
+          <span class="suggestion-badge">${detail.badge}</span>
+          <small>${detail.extra}</small>
+        </div>
       </button>
-    `).join('');
+    `;
+    }).join('');
 
     homeSearchSuggestionList.querySelectorAll('.suggestion-item').forEach(btn=>{
       btn.addEventListener('click',()=>{
@@ -130,13 +158,12 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
   const openHomeSearchPopup=()=>{
     homeSearchPopup.classList.remove('hidden');
     renderHomeSuggestions(homeSearchInput.value);
-    setTimeout(()=>homeSearchInput.focus(), 0);
+    setTimeout(()=>homeSearchInput.focus(),0);
   };
 
   const closeHomeSearchPopup=()=>homeSearchPopup.classList.add('hidden');
 
   homeCityLauncher.addEventListener('click',openHomeSearchPopup);
-  homeSearchCloseBtn?.addEventListener('click',closeHomeSearchPopup);
   homeSearchPopup.addEventListener('click',(e)=>{ if(e.target===homeSearchPopup) closeHomeSearchPopup(); });
 
   homeSearchInput.addEventListener('input',(e)=>{
@@ -160,6 +187,7 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
 
   renderHomeSuggestions('');
 }
+
 
 const sections=document.querySelectorAll('.info-section');
 const tabs=document.querySelectorAll('.tab-anchor');
