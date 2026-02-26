@@ -151,6 +151,7 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
         if(homeSelectedLabel) homeSelectedLabel.textContent=selectedEntry.label;
         homeSearchInput.value=selectedEntry.label;
         applyHomeCardFilter(selectedEntry.label);
+        closeHomeSearchPopup();
       });
     });
   };
@@ -163,15 +164,30 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
 
   const closeHomeSearchPopup=()=>homeSearchPopup.classList.add('hidden');
 
-  homeCityLauncher.addEventListener('click',openHomeSearchPopup);
-  homeSearchPopup.addEventListener('click',(e)=>{ if(e.target===homeSearchPopup) closeHomeSearchPopup(); });
+  homeCityLauncher.addEventListener('click',()=>{
+    openHomeSearchPopup();
+  });
+
+  homeSearchInput.addEventListener('focus', openHomeSearchPopup);
 
   homeSearchInput.addEventListener('input',(e)=>{
     const value=e.target.value||'';
     selectedEntry={label:value,type:'city'};
     if(homeSelectedLabel) homeSelectedLabel.textContent=value || 'Pilih Kota Hotel';
+    openHomeSearchPopup();
     renderHomeSuggestions(value);
     applyHomeCardFilter(value);
+  });
+
+  document.addEventListener('click',(e)=>{
+    const target=e.target;
+    const insidePanel=homeSearchPopup.contains(target);
+    const onLauncher=homeCityLauncher.contains(target);
+    if(!insidePanel && !onLauncher) closeHomeSearchPopup();
+  });
+
+  homeSearchInput.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape') closeHomeSearchPopup();
   });
 
   homeSearchBtn?.addEventListener('click',()=>{
