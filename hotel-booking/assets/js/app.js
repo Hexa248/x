@@ -46,7 +46,11 @@ const homeSearchCloseBtn=document.getElementById('homeSearchCloseBtn');
 const homeSearchBtn=document.getElementById('homeSearchBtn');
 const homeSelectedLabel=document.getElementById('cityInput');
 if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestionList){
-  const defaultCities=['Bandung','Balikpapan'];
+  const defaultCities=[
+    'Bandung','Balikpapan','Banda Aceh','Banjarbaru','Banjarmasin','Batam','Bogor','Cirebon',
+    'Denpasar','Jakarta','Jayapura','Kupang','Makassar','Malang','Manado','Medan','Padang',
+    'Palembang','Pekanbaru','Pontianak','Semarang','Solo','Surabaya','Yogyakarta'
+  ];
   const roomSuggestions=['Deluxe Room','Family Room','Suite Room','Twin Room'];
   const homeEntries=[];
   cityCards.forEach(card=>{
@@ -80,9 +84,27 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
     });
   };
 
+  const scoreSuggestion=(item, keyword)=>{
+    const text=item.label.toLowerCase();
+    if(!keyword) return item.type==='city' ? 0 : item.type==='hotel' ? 1 : 2;
+    const starts=text.startsWith(keyword);
+    const contains=text.includes(keyword);
+    if(!contains) return 999;
+    const typeBoost=item.type==='city' ? 0 : item.type==='hotel' ? 1 : 2;
+    return (starts ? 0 : 10) + typeBoost;
+  };
+
   const renderHomeSuggestions=(term='')=>{
     const keyword=term.toLowerCase().trim();
-    const matched=uniqueEntries.filter(item=>!keyword || item.label.toLowerCase().includes(keyword)).slice(0,10);
+    const matched=uniqueEntries
+      .filter(item=>!keyword || item.label.toLowerCase().includes(keyword))
+      .sort((a,b)=>{
+        const scoreA=scoreSuggestion(a, keyword);
+        const scoreB=scoreSuggestion(b, keyword);
+        if(scoreA!==scoreB) return scoreA-scoreB;
+        return a.label.localeCompare(b.label,'id');
+      })
+      .slice(0,10);
     if(!matched.length){
       homeSearchSuggestionList.innerHTML='<p class="muted">Tidak ada hasil pencarian.</p>';
       return;
