@@ -1,0 +1,80 @@
+{{define "content"}}
+<section class="admin-shell-v2">
+  <section class="admin-kpi-grid-v2">
+    <article class="admin-kpi-card blue"><p>Total Booking</p><h3>{{.BookingsCount}}</h3><small>Update realtime</small></article>
+    <article class="admin-kpi-card cyan"><p>Total Tamu</p><h3>{{.TotalGuests}}</h3><small>Sudah check-in</small></article>
+    <article class="admin-kpi-card violet"><p>Total Hari Menginap</p><h3>{{.TotalNights}}</h3><small>Semua periode</small></article>
+    <article class="admin-kpi-card dark"><p>Booking Minggu Ini</p><h3>{{.ThisWeekBookings}}</h3><small>Tamu {{.ThisWeekGuests}} • Night {{.ThisWeekNights}}</small></article>
+  </section>
+
+  <section class="admin-main-grid-v2">
+    <article class="admin-panel-v2">
+      <div class="panel-head"><h3>Operasional Booking</h3><span class="tag">Shift</span></div>
+      <table class="admin-table">
+        <thead><tr><th>ID</th><th>Tanggal</th><th>Tamu</th><th>Durasi</th><th>Status</th></tr></thead>
+        <tbody>
+        {{range .RecentBookings}}
+        <tr><td>#{{.ID}}</td><td>{{.BookedAt}}</td><td>{{.Guests}} orang</td><td>{{.Nights}} hari</td><td>{{.Status}}</td></tr>
+        {{end}}
+        </tbody>
+      </table>
+    </article>
+
+    <article id="notif" class="admin-panel-v2">
+      <div class="panel-head"><h3>Notifikasi Staff</h3><span class="tag">Live</span></div>
+      <ul class="activity-list">
+        {{range .Notifications}}
+        <li><strong>{{.Message}}</strong><small>{{.CreatedAt.Format "02 Jan 2006 15:04"}}</small></li>
+        {{else}}
+        <li><strong>Tidak ada notifikasi baru</strong><small>Operasional stabil.</small></li>
+        {{end}}
+      </ul>
+    </article>
+  </section>
+
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Hotel per Kota (Staff View)</h3><span class="tag">Operasional Area</span></div>
+    <div class="city-admin-grid">
+      {{range .CityOrder}}
+      <article class="city-admin-card">
+        <div class="city-admin-head">
+          <h4>{{.}}</h4>
+          <span>{{len (index $.HotelsByCity .)}} hotel</span>
+        </div>
+        <div class="city-admin-list">
+          {{range index $.HotelsByCity .}}
+          <div class="city-admin-item">
+            <div>
+              <strong>{{.Name}}</strong>
+              <small>Rating {{printf "%.1f" .Rating}}</small>
+            </div>
+            <a href="/hotel?id={{.ID}}">Lihat Detail</a>
+          </div>
+          {{end}}
+        </div>
+      </article>
+      {{end}}
+    </div>
+  </section>
+
+  <section id="staff-tasks" class="admin-panel-v2">
+    <div class="panel-head"><h3>Tugas Staff Hotel</h3><span class="tag">Operasional Harian</span></div>
+    <div class="task-grid">
+      <article><h4>1. Kelola Booking</h4><ul><li>Konfirmasi check-in</li><li>Konfirmasi check-out</li><li>Update status booking</li></ul></article>
+      <article><h4>2. Update Status Kamar</h4><ul><li>Available</li><li>Occupied</li><li>Cleaning</li><li>Maintenance</li></ul></article>
+      <article><h4>3. Kelola Tamu</h4><ul><li>Input data tamu saat check-in</li><li>Cetak invoice</li><li>Input pembayaran manual (offline)</li></ul></article>
+      <article><h4>4. Komunikasi Tamu</h4><ul><li>Catat permintaan khusus</li><li>Update catatan internal</li></ul></article>
+    </div>
+  </section>
+
+  <section id="staff-limits" class="admin-panel-v2 denied-panel">
+    <div class="panel-head"><h3>Akses yang Tidak Dimiliki Staff</h3><span class="tag">Batas Hak Akses</span></div>
+    <ul class="deny-list">
+      <li>❌ Tidak bisa hapus hotel</li>
+      <li>❌ Tidak bisa hapus user</li>
+      <li>❌ Tidak bisa ubah sistem</li>
+      <li>❌ Tidak punya akses laporan keuangan penuh</li>
+    </ul>
+  </section>
+</section>
+{{end}}

@@ -1,0 +1,57 @@
+{{define "content"}}
+<section class="payment-page">
+  <div class="payment-head">
+    <h2>Pilih Metode Pembayaran</h2>
+    <p>Pembayaran tidak hanya Virtual Account. Silakan pilih metode yang paling nyaman untuk Anda.</p>
+  </div>
+
+  <div class="payment-method-grid" id="paymentMethodGrid">
+    <label class="payment-method-card active" data-method="Virtual Account">
+      <input type="radio" name="payment_method" value="Virtual Account" checked>
+      <h3>Virtual Account</h3>
+      <p>BCA / BNI / Mandiri / BRI</p>
+      <small>Verifikasi otomatis 24 jam.</small>
+    </label>
+
+    <label class="payment-method-card" data-method="E-Wallet">
+      <input type="radio" name="payment_method" value="E-Wallet">
+      <h3>E-Wallet</h3>
+      <p>GoPay / OVO / DANA / ShopeePay</p>
+      <small>Instan, cocok untuk mobile.</small>
+    </label>
+
+    <label class="payment-method-card" data-method="Kartu Kredit">
+      <input type="radio" name="payment_method" value="Kartu Kredit">
+      <h3>Kartu Kredit</h3>
+      <p>Visa / MasterCard / JCB</p>
+      <small>Dukungan cicilan bank tertentu.</small>
+    </label>
+
+    <label class="payment-method-card" data-method="QRIS">
+      <input type="radio" name="payment_method" value="QRIS">
+      <h3>QRIS</h3>
+      <p>Scan via aplikasi bank/e-wallet</p>
+      <small>Tanpa input nomor rekening.</small>
+    </label>
+
+    <label class="payment-method-card" data-method="Transfer Bank">
+      <input type="radio" name="payment_method" value="Transfer Bank">
+      <h3>Transfer Bank</h3>
+      <p>Transfer manual antar bank</p>
+      <small>Cocok untuk internet banking.</small>
+    </label>
+
+    <label class="payment-method-card" data-method="Gerai Retail">
+      <input type="radio" name="payment_method" value="Gerai Retail">
+      <h3>Gerai Retail</h3>
+      <p>Indomaret / Alfamart</p>
+      <small>Bayar tunai di kasir.</small>
+    </label>
+  </div>
+
+  <div class="payment-footer">
+    <p id="selectedPaymentText">Metode dipilih: <strong>Virtual Account</strong></p>
+    <button class="btn" id="payNowBtn">Bayar Sekarang</button>
+  </div>
+</section>
+{{end}}
