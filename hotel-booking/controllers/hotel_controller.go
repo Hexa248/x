@@ -38,7 +38,7 @@ func uniqueHotelsByCity(hotels []models.Hotel) []models.Hotel {
 func (a *App) HotelsPage(w http.ResponseWriter, r *http.Request) {
 	city := r.URL.Query().Get("city")
 	if city == "" {
-		render(w, "hotels.html", HomeData{Title: "Daftar Hotel", Hotels: a.DB.Hotels})
+		render(w, "hotels.html", HomeData{Title: "Pilih Kota Hotel", Hotels: nil, SelectedCity: ""})
 		return
 	}
 
