@@ -1,0 +1,60 @@
+{{define "content"}}
+<section class="admin-shell">
+  <div class="admin-head">
+    <h2>Staff Hotel Dashboard</h2>
+    <div class="actions">
+      <a class="btn" href="/staff/rooms">Operasional Kamar</a>
+      <a class="btn secondary" href="/admin">Panel Admin</a>
+    </div>
+  </div>
+
+  <div class="admin-kpi-grid">
+    <article><h4>Total Booking</h4><p>{{.BookingsCount}}</p></article>
+    <article><h4>Total Tamu</h4><p>{{.TotalGuests}}</p></article>
+    <article><h4>Total Hari Menginap</h4><p>{{.TotalNights}}</p></article>
+    <article><h4>Total Kamar</h4><p>{{len .Rooms}}</p></article>
+  </div>
+
+  <div class="admin-kpi-grid">
+    <article><h4>Booking Minggu Ini</h4><p>{{.ThisWeekBookings}}</p></article>
+    <article><h4>Tamu Minggu Ini</h4><p>{{.ThisWeekGuests}}</p></article>
+    <article><h4>Hari Menginap Minggu Ini</h4><p>{{.ThisWeekNights}}</p></article>
+    <article><h4>Total Hotel Terkelola</h4><p>{{len .Hotels}}</p></article>
+  </div>
+
+
+  <section class="admin-table-wrap">
+    <h3>Peran Staff Hotel</h3>
+    <p>Staff hotel berfokus pada pelayanan langsung kepada tamu, mulai dari check-in/check-out, kebersihan kamar, layanan restoran, hingga bantuan barang tamu.</p>
+    <p>Panel ini membantu staff memonitor jumlah orang yang menginap, total hari menginap, dan volume mingguan agar kualitas layanan tetap konsisten seperti standar hotel kota wisata.</p>
+  </section>
+
+
+  <section id="notif" class="admin-table-wrap">
+    <h3>Notifikasi Staff</h3>
+    <ul>
+      {{range .Notifications}}
+      <li>{{.CreatedAt.Format "02 Jan 2006 15:04"}} - {{.Message}}</li>
+      {{end}}
+    </ul>
+  </section>
+
+  <section class="admin-table-wrap">
+    <h3>Riwayat Booking Terbaru</h3>
+    <table class="admin-table">
+      <thead><tr><th>ID Booking</th><th>Tanggal</th><th>Tamu</th><th>Durasi (Hari)</th><th>Status</th></tr></thead>
+      <tbody>
+      {{range .RecentBookings}}
+      <tr>
+        <td>#{{.ID}}</td>
+        <td>{{.BookedAt}}</td>
+        <td>{{.Guests}} orang</td>
+        <td>{{.Nights}} hari</td>
+        <td>{{.Status}}</td>
+      </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+</section>
+{{end}}
