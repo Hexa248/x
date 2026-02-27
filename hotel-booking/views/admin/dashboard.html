@@ -1,0 +1,53 @@
+{{define "content"}}
+<section class="admin-shell">
+  <div class="admin-head">
+    <h2>Admin Panel</h2>
+    <div class="actions">
+      <a class="btn" href="/admin/users">Kelola User</a>
+      <a class="btn secondary" href="/staff">Lihat Panel Staff</a>
+    </div>
+  </div>
+
+  <div class="admin-kpi-grid">
+    <article><h4>Total User</h4><p>{{len .Users}}</p></article>
+    <article><h4>Total Hotel</h4><p>{{len .Hotels}}</p></article>
+    <article><h4>Total Kamar</h4><p>{{len .Rooms}}</p></article>
+    <article><h4>Booking Aktif</h4><p>{{.BookingsCount}}</p></article>
+  </div>
+
+
+  <section class="admin-table-wrap">
+    <h3>Peran Admin Hotel</h3>
+    <p>Admin hotel fokus pada administrasi dan pengelolaan data operasional: mengelola reservasi tamu, menyusun jadwal kamar, membuat laporan harian/bulanan, input data tamu, arsip dokumen, serta komunikasi via email/telepon terkait pemesanan.</p>
+    <p>Alur kerja admin di dashboard ini dibuat terstruktur seperti sistem manajemen hotel modern, sehingga pencatatan dan pelaporan dapat berjalan rapi dan saling terhubung antar modul.</p>
+  </section>
+
+
+  <section id="notif" class="admin-table-wrap">
+    <h3>Notifikasi Admin</h3>
+    <ul>
+      {{range .Notifications}}
+      <li>{{.CreatedAt.Format "02 Jan 2006 15:04"}} - {{.Message}}</li>
+      {{end}}
+    </ul>
+  </section>
+
+  <section class="admin-table-wrap">
+    <h3>Hotel Terdaftar</h3>
+    <table class="admin-table">
+      <thead><tr><th>ID</th><th>Nama Hotel</th><th>Kota</th><th>Rating</th><th>Aksi</th></tr></thead>
+      <tbody>
+      {{range .Hotels}}
+      <tr>
+        <td>{{.ID}}</td>
+        <td>{{.Name}}</td>
+        <td>{{.City}}</td>
+        <td>{{printf "%.1f" .Rating}}</td>
+        <td><a href="/hotel?id={{.ID}}">Detail</a></td>
+      </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+</section>
+{{end}}
