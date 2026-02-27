@@ -1,0 +1,28 @@
+{{define "content"}}
+<section class="admin-shell">
+  <div class="admin-head">
+    <h2>Operasional Kamar</h2>
+    <div class="actions">
+      <a class="btn secondary" href="/staff">Kembali ke Dashboard Staff</a>
+      <a class="btn" href="/admin">Panel Admin</a>
+    </div>
+  </div>
+
+  <section class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>ID Kamar</th><th>Tipe</th><th>Harga</th><th>Kapasitas</th><th>Stok Tersisa</th></tr></thead>
+      <tbody>
+      {{range .Rooms}}
+      <tr>
+        <td>{{.ID}}</td>
+        <td>{{.Type}}</td>
+        <td>Rp {{.PricePerNight}}</td>
+        <td>{{.Capacity}} Tamu</td>
+        <td>{{.Stock}} kamar</td>
+      </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+</section>
+{{end}}
