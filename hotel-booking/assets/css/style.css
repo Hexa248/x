@@ -235,3 +235,8 @@ body.js-animate .room-row.scroll-animate.in-view{opacity:1;transform:none}
 .denied-panel{background:linear-gradient(180deg,#fff7f7,#fff)}
 .deny-list{margin:0;padding-left:18px;display:grid;gap:6px;color:#7c2a2a}
 @media (max-width:980px){.staff-app-shell{grid-template-columns:1fr}.staff-sidebar-v2{position:relative;height:auto;border-radius:0 0 16px 16px}.staff-topbar-v2{flex-direction:column;align-items:flex-start}}
+.city-card-grid-admin{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.city-card-admin{border:1px solid #dfebfb;border-radius:12px;padding:10px;background:#fbfdff}
+.city-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.city-card-head h4{margin:0}.city-card-head span{font-size:12px;color:#0a67b7;font-weight:700;background:#e8f3ff;padding:3px 8px;border-radius:999px}
+.city-hotel-list-admin{list-style:none;margin:0;padding:0;display:grid;gap:8px}.city-hotel-list-admin li{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid #e7eefb;border-radius:10px;padding:8px;background:#fff}
+.city-hotel-list-admin strong{display:block;font-size:14px}.city-hotel-list-admin small{color:#62758d}.city-hotel-list-admin a{font-weight:700;color:#0a67b7;text-decoration:none}

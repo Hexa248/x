@@ -30,6 +30,7 @@ func main() {
 	routes.AuthRoutes(mux, app)
 	routes.StaffRoutes(mux, app)
 	routes.AdminRoutes(mux, app)
+	mux.HandleFunc("/hotel", app.HotelDetail)
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
 	handler := middleware.Logger(middleware.CORS(mux))

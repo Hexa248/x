@@ -56,19 +56,29 @@
 
   <section class="admin-panel-v2">
     <div class="panel-head"><h3>Hotel Directory per Kota</h3><span class="tag">Master Data</span></div>
-    {{range .CityOrder}}
-    <div class="city-section-block">
-      <h4>{{.}}</h4>
-      <table class="admin-table">
-        <thead><tr><th>ID</th><th>Nama Hotel</th><th>Kota</th><th>Rating</th><th>Aksi</th></tr></thead>
-        <tbody>
-        {{range index $.HotelsByCity .}}
-        <tr><td>{{.ID}}</td><td>{{.Name}}</td><td>{{.City}}</td><td>{{printf "%.1f" .Rating}}</td><td><a href="/hotel?id={{.ID}}">Detail</a></td></tr>
-        {{end}}
-        </tbody>
-      </table>
+    <div class="city-card-grid-admin">
+      {{range .CityOrder}}
+      <article class="city-card-admin">
+        <div class="city-card-head">
+          <h4>{{.}}</h4>
+          <span>{{len (index $.HotelsByCity .)}} hotel</span>
+        </div>
+        <ul class="city-hotel-list-admin">
+          {{range $i, $hotel := index $.HotelsByCity .}}
+            {{if lt $i 5}}
+            <li>
+              <div>
+                <strong>{{$hotel.Name}}</strong>
+                <small>Rating {{printf "%.1f" $hotel.Rating}}</small>
+              </div>
+              <a href="/hotel?id={{$hotel.ID}}">Detail</a>
+            </li>
+            {{end}}
+          {{end}}
+        </ul>
+      </article>
+      {{end}}
     </div>
-    {{end}}
   </section>
 </section>
 {{end}}
