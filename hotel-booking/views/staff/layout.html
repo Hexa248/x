@@ -1,0 +1,25 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{.Title}} - Staff StayNusa</title>
+  <link rel="stylesheet" href="/assets/css/style.css"/>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">StayNusa Staff</div>
+  <nav>
+    <a href="/staff">Dashboard Staff</a>
+    <a href="/staff/rooms">Operasional Kamar</a>
+    <a href="/admin">Portal Admin</a>
+    <a href="#notif">Notifikasi ({{.StaffNotifCount}})</a>
+    <a href="/">Kembali ke Beranda</a>
+  </nav>
+</header>
+<main class="container">{{template "content" .}}</main>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>
+{{end}}
