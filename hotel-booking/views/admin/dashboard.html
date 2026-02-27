@@ -1,0 +1,70 @@
+{{define "content"}}
+<section class="admin-shell-v2">
+  <section class="admin-kpi-grid-v2">
+    <article class="admin-kpi-card blue"><p>Total Booking</p><h3>{{.BookingsCount}}</h3><small>+12% vs minggu lalu</small></article>
+    <article class="admin-kpi-card cyan"><p>Total Payment</p><h3>{{.PaymentsCount}}</h3><small>Status pembayaran terhubung</small></article>
+    <article class="admin-kpi-card violet"><p>Hotel Aktif</p><h3>{{len .Hotels}}</h3><small>Lintas kota Indonesia</small></article>
+    <article class="admin-kpi-card dark"><p>Notifikasi Admin</p><h3>{{.AdminNotifCount}}</h3><small>Perlu tindak lanjut hari ini</small></article>
+  </section>
+
+  <section class="admin-main-grid-v2">
+    <article class="admin-panel-v2">
+      <div class="panel-head"><h3>Booking Overview</h3><span class="tag">Realtime</span></div>
+      <div class="fake-chart bars"><span style="height:32%"></span><span style="height:48%"></span><span style="height:40%"></span><span style="height:65%"></span><span style="height:58%"></span><span style="height:76%"></span><span style="height:88%"></span><span style="height:72%"></span></div>
+      <p class="muted">Trend okupansi menunjukkan lonjakan pada akhir pekan. Gunakan panel ini untuk atur promosi dinamis.</p>
+    </article>
+
+    <article class="admin-panel-v2">
+      <div class="panel-head"><h3>Revenue Pulse</h3><span class="tag">Finance</span></div>
+      <div class="fake-chart line"><svg viewBox="0 0 420 120" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,95 40,80 80,86 120,60 160,74 200,44 240,52 280,36 320,42 360,20 420,28" /></svg></div>
+      <div class="admin-split-stats"><div><strong>Rp 184.5M</strong><small>Gross Revenue</small></div><div><strong>+18.2%</strong><small>Growth</small></div></div>
+    </article>
+
+    <article id="notif" class="admin-panel-v2">
+      <div class="panel-head"><h3>Recent Activity</h3><span class="tag">Alerts</span></div>
+      <ul class="activity-list">
+        {{range .Notifications}}
+        <li><strong>{{.Message}}</strong><small>{{.CreatedAt.Format "02 Jan 2006 15:04"}}</small></li>
+        {{else}}
+        <li><strong>Tidak ada notifikasi baru</strong><small>Sistem tetap stabil.</small></li>
+        {{end}}
+      </ul>
+    </article>
+
+    <article class="admin-panel-v2">
+      <div class="panel-head"><h3>Quick Actions</h3><span class="tag">Multifungsi</span></div>
+      <div class="quick-actions-grid">
+        <a class="quick-action" href="/admin/users">Kelola user & role</a>
+        <a class="quick-action" href="/hotels">Audit data hotel</a>
+        <a class="quick-action" href="/payment">Pantau pembayaran</a>
+        <a class="quick-action" href="/staff">Sync ke staff desk</a>
+      </div>
+    </article>
+  </section>
+
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Hotel Directory per Kota</h3><span class="tag">Master Data</span></div>
+    <div class="city-admin-grid">
+      {{range .CityOrder}}
+      <article class="city-admin-card">
+        <div class="city-admin-head">
+          <h4>{{.}}</h4>
+          <span>{{len (index $.HotelsByCity .)}} hotel</span>
+        </div>
+        <div class="city-admin-list">
+          {{range index $.HotelsByCity .}}
+          <div class="city-admin-item">
+            <div>
+              <strong>{{.Name}}</strong>
+              <small>Rating {{printf "%.1f" .Rating}}</small>
+            </div>
+            <a href="/hotel?id={{.ID}}">Lihat Detail</a>
+          </div>
+          {{end}}
+        </div>
+      </article>
+      {{end}}
+    </div>
+  </section>
+</section>
+{{end}}
