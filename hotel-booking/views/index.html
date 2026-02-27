@@ -40,9 +40,11 @@
   <a class="city-card city-link" href="/hotels?city={{.City}}" data-city="{{.City}}" data-hotel="{{.Name}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
     <img src="{{.Image}}" alt="{{.City}}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/cityfallback/1200/800'">
     <div class="city-overlay">
-      <h4>{{.City}}</h4>
-      <p>Udara sejuk, kuliner, dan kreativitas</p>
-      <span class="city-overlay-cta">Lihat 10 hotel di {{.City}}</span>
+      <div class="city-overlay-content">
+        <h4>{{.City}}</h4>
+        <p>Udara sejuk, kuliner, dan kreativitas</p>
+        <span class="city-overlay-cta">Lihat 10 hotel di {{.City}}</span>
+      </div>
     </div>
   </a>
 {{end}}
