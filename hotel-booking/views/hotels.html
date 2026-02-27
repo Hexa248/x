@@ -1,0 +1,96 @@
+{{define "content"}}
+<section class="smart-search-strip smart-search-form" id="smartSearchStrip">
+  <label class="smart-input">
+    <span>📍</span>
+    <input id="cityInputHotels" value="{{if .SelectedCity}}{{.SelectedCity}}{{end}}" placeholder="Cari nama hotel">
+  </label>
+  <button class="smart-chip" data-open="date">📅 <span id="smartDateText">Min, 22 Feb 2026 - Sen, 23 Feb 2026</span></button>
+  <button class="smart-chip" data-open="guest">👥 <span id="smartGuestText">2 Dewasa, 0 Anak, 1 Kamar</span></button>
+  <button class="btn smart-search-btn" id="smartSearchBtn">Search Hotels</button>
+</section>
+
+<section class="hotel-results-layout" id="hotelResultsLayout">
+  <aside class="filter-sidebar split-scroll-pane split-scroll-left" id="hotelFilterSidebar">
+    <div class="filter-card promo-mini"><p><strong>Dapatkan diskon 8%</strong><br/>s.d. Rp100.000!<br/>Gunakan kode "JALANYUK".</p></div>
+    <div class="filter-card"><h4>Ide tanggal menginap</h4><div class="mini-grid"><span class="quick-date" data-days="0">Hari ini</span><span class="quick-date" data-days="1">Besok</span><span class="quick-date" data-days="5">Weekend sel.</span><span class="quick-date" data-days="6">Weekend beri.</span></div></div>
+    <div class="filter-card">
+      <h4>Rentang Harga</h4>
+      <div class="price-line"></div>
+      <div class="price-chip-row"><span id="priceMinLabel">IDR 100.000</span><span id="priceMaxLabel">IDR 2.000.000</span></div>
+      <input id="priceMin" type="range" min="100000" max="2000000" step="50000" value="100000">
+      <input id="priceMax" type="range" min="100000" max="2000000" step="50000" value="2000000">
+    </div>
+    <div class="filter-card"><h4>Promo & Diskon</h4><label><input type="checkbox" data-filter="promo" value="promo-anda"> Promo untuk Anda</label><label><input type="checkbox" data-filter="promo" value="ramadan"> Ramadan</label><label><input type="checkbox" data-filter="promo" value="extra-benefit"> Extra Benefit</label><label><input type="checkbox" data-filter="promo" value="domestik"> Promo Domestik</label></div>
+    <div class="filter-card"><h4>Bintang</h4><label><input type="checkbox" data-filter="star" value="1"> 1 ⭐</label><label><input type="checkbox" data-filter="star" value="2"> 2 ⭐</label><label><input type="checkbox" data-filter="star" value="3" checked> 3 ⭐</label><label><input type="checkbox" data-filter="star" value="4" checked> 4 ⭐</label><label><input type="checkbox" data-filter="star" value="5" checked> 5 ⭐</label></div>
+    <div class="filter-card"><h4>Rating dari Tamu</h4><label><input type="checkbox" data-filter="rating" value="7"> 7+ Nyaman</label><label><input type="checkbox" data-filter="rating" value="8"> 8+ Mengesankan</label><label><input type="checkbox" data-filter="rating" value="9"> 9+ Luar Biasa</label></div>
+    <div class="filter-card"><h4>Tipe Akomodasi</h4><label><input type="checkbox" data-filter="type" value="vila"> Vila</label><label><input type="checkbox" data-filter="type" value="hotel"> Hotel</label><label><input type="checkbox" data-filter="type" value="ryokan"> Ryokan</label><label><input type="checkbox" data-filter="type" value="apartemen"> Apartemen</label><label><input type="checkbox" data-filter="type" value="guesthouse"> Guesthouse</label><a href="#">Lihat Semua</a></div>
+    <div class="filter-card"><h4>Fasilitas yang sering dicari</h4><label><input type="checkbox" data-filter="facility" value="restoran"> Restoran</label><label><input type="checkbox" data-filter="facility" value="sarapan"> Sarapan Tersedia</label><label><input type="checkbox" data-filter="facility" value="early-checkin"> Early Check-In</label><label><input type="checkbox" data-filter="facility" value="antar-jemput-bandara"> Antar-jemput Bandara</label><label><input type="checkbox" data-filter="facility" value="late-checkout"> Late Check-Out</label><a href="#">Lihat Semua</a></div>
+    <div class="filter-actions"><button class="btn secondary" id="resetFiltersBtn">Reset</button><button class="btn" id="applyFiltersBtn">Terapkan</button></div>
+  </aside>
+
+  <div class="hotel-listing split-scroll-pane split-scroll-right" id="hotelListing">
+    <button class="btn mobile-filter-btn" id="mobileFilterBtn">Filter Hotel</button>
+    <div class="city-hotel-head">
+      <div>
+        <h2>{{if .SelectedCity}}Rekomendasi Hotel di {{.SelectedCity}}{{else}}Pemilihan Hotel{{end}}</h2>
+        <p id="hotelResultSummary">{{if .SelectedCity}}Menampilkan 5 hotel pilihan terbaik untuk kota {{.SelectedCity}}.{{else}}Pilih kota dari beranda untuk menampilkan hotel per kota.{{end}}</p>
+      </div>
+    </div>
+
+    {{range .Hotels}}
+    <article class="result-card" data-city="{{.City}}" data-name="{{.Name}}" data-rating="{{printf "%.1f" .Rating}}" data-star="{{if ge .Rating 9.0}}5{{else if ge .Rating 8.5}}4{{else}}3{{end}}" data-price="{{printf "%d" .ID}}47234">
+      <img src="{{.Image}}" alt="{{.Name}}">
+      <div class="result-main">
+        <h3>{{.Name}}</h3>
+        <p class="muted">{{.City}} • {{.Address}}</p>
+        <p><span class="pill">Hotel</span> {{if ge .Rating 4.8}}⭐⭐⭐⭐⭐{{else if ge .Rating 4.5}}⭐⭐⭐⭐{{else}}⭐⭐⭐{{end}} Preferred Partner</p>
+        <p class="muted">"Kamar bersih, lokasi strategis, staff ramah, cocok untuk perjalanan bisnis maupun keluarga."</p>
+      </div>
+      <div class="result-side">
+        <p class="score">{{printf "%.1f" .Rating}}</p>
+        <p class="muted">Mengesankan</p>
+        <p class="price">Rp {{printf "%d" .ID}}47.234</p>
+        <a class="btn" href="/booking?hotel={{.ID}}">Pilih Kamar</a>
+      </div>
+    </article>
+    {{end}}
+
+    <p id="hotelEmptyState" class="muted hidden">Tidak ada hotel yang cocok dengan filter saat ini.</p>
+  </div>
+</section>
+
+<div class="filter-drawer-backdrop hidden" id="filterDrawerBackdrop"></div>
+
+<div class="pull-search-handle hidden" id="hotelPullHandle">Tarik pencarian hotel</div>
+<div class="floating-search-sheet hidden" id="floatingSearchSheet">
+  <div class="floating-search-head">Pencarian Cepat</div>
+  <div class="floating-search-grid">
+    <button class="smart-chip" id="floatFocusHotel">🏨 <span id="floatCityText">Cari nama hotel</span></button>
+    <button class="smart-chip" data-open="date">📅 <span id="floatDateText">Check-in / Check-out</span></button>
+    <button class="smart-chip" data-open="guest">👥 <span id="floatGuestText">Tamu & Kamar</span></button>
+    <button class="btn smart-search-btn" id="floatSearchBtn">Search Hotels</button>
+  </div>
+</div>
+
+<div id="hotel-search-popup" class="popup hidden">
+  <div class="popup-content hotel-popup-content">
+    <h3 id="hotelPopupTitle">Pilih</h3>
+    <div id="hotelPopupBody"></div>
+    <div class="actions">
+      <button class="btn secondary" id="hotelPopupCancel">Batal</button>
+      <button class="btn" id="hotelPopupApply">Terapkan</button>
+    </div>
+  </div>
+</div>
+
+<div id="filter-action-popup" class="popup hidden">
+  <div class="popup-content filter-action-popup-content">
+    <h3 id="filterActionTitle">Konfirmasi Filter</h3>
+    <p id="filterActionText">Lanjutkan aksi filter?</p>
+    <div class="actions">
+      <button class="btn secondary" id="filterActionCancel">Batal</button>
+      <button class="btn" id="filterActionConfirm">Ya, Lanjutkan</button>
+    </div>
+  </div>
+</div>
+{{end}}
