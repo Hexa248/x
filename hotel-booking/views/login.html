@@ -1,0 +1,35 @@
+{{define "content"}}
+<section class="login-wrap">
+  <div class="login-card-ref">
+    <div class="login-top-banner">
+      <h2>Ada penawaran yang kamu mungkin suka!</h2>
+      <p>Masuk untuk diskon, reward, dan kemudahan pembayaran.</p>
+    </div>
+
+    <div class="social-login-grid">
+      <button class="social-btn"><span>🟢</span>Google</button>
+      <button class="social-btn"><span>🍎</span>Apple</button>
+      <button class="social-btn"><span>🔵</span>Facebook</button>
+    </div>
+
+    <p class="other-method">Metode lain</p>
+
+    <form class="auth-form">
+      <input placeholder="Email" type="email" required>
+      <input placeholder="Password" type="password" required>
+      <select>
+        <option>Login sebagai user</option>
+        <option>Login sebagai staff hotel</option>
+        <option>Login sebagai admin</option>
+      </select>
+      <button class="btn" type="submit">Masuk</button>
+    </form>
+
+    <div class="terms-box">
+      Dengan melanjutkan, kamu menyetujui Syarat & Ketentuan dan Pemberitahuan Privasi.
+    </div>
+
+    <a href="/" class="guest-link">Lihat sebagai tamu</a>
+  </div>
+</section>
+{{end}}
