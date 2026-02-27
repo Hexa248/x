@@ -1,22 +1,21 @@
 {{define "content"}}
-<section class="admin-shell">
-  <div class="admin-head">
-    <h2>Manajemen User</h2>
-    <div class="actions">
-      <a class="btn secondary" href="/admin">Kembali ke Admin</a>
-      <a class="btn" href="/staff">Lihat Staff</a>
+<section class="admin-shell-v2">
+  <section class="admin-panel-v2">
+    <div class="panel-head">
+      <h3>Manajemen User & Role</h3>
+      <span class="tag">Access Control</span>
     </div>
-  </div>
-  <section class="admin-table-wrap">
+    <p class="muted">Kelola akun admin/staff/user, audit akses, dan kontrol peran operasional pada satu halaman.</p>
     <table class="admin-table">
-      <thead><tr><th>ID</th><th>Nama</th><th>Email</th><th>Role</th></tr></thead>
+      <thead><tr><th>ID</th><th>Nama</th><th>Email</th><th>Role</th><th>Status</th></tr></thead>
       <tbody>
       {{range .Users}}
       <tr>
         <td>{{.ID}}</td>
         <td>{{.Name}}</td>
         <td>{{.Email}}</td>
-        <td>{{.Role}}</td>
+        <td><span class="role-pill">{{.Role}}</span></td>
+        <td>Aktif</td>
       </tr>
       {{end}}
       </tbody>
