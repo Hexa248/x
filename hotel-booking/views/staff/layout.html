@@ -1,0 +1,46 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{.Title}} - Staff StayNusa</title>
+  <link rel="stylesheet" href="/assets/css/style.css"/>
+</head>
+<body class="staff-body">
+<div class="staff-app-shell">
+  <aside class="staff-sidebar-v2">
+    <div class="staff-brand">
+      <div class="staff-brand-icon">🧑‍💻</div>
+      <div><strong>StayNusa Staff</strong><small>Daily Operations Desk</small></div>
+    </div>
+    <nav class="staff-nav-v2">
+      <a href="/staff" class="active">Dashboard</a>
+      <a href="/staff/rooms">Status Kamar</a>
+      <a href="#staff-tasks">Tugas Staff</a>
+      <a href="#staff-limits">Batas Akses</a>
+    </nav>
+    <div class="staff-sidebar-footer">
+      <a href="/admin">Buka Panel Admin</a>
+      <a href="/">Kembali ke User App</a>
+    </div>
+  </aside>
+
+  <div class="staff-main-v2">
+    <header class="staff-topbar-v2">
+      <div>
+        <h1>{{.Title}}</h1>
+        <p>Panel operasional harian: booking, check-in/out, status kamar, dan catatan tamu.</p>
+      </div>
+      <div class="admin-top-actions">
+        <button class="btn secondary" type="button">Print Shift Summary</button>
+        <button class="btn" type="button">+ Catatan Internal</button>
+      </div>
+    </header>
+    <main class="staff-content-v2">{{template "content" .}}</main>
+  </div>
+</div>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>
+{{end}}
