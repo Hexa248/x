@@ -34,14 +34,15 @@
   </div>
 </section>
 
-<h3>Kota Populer Indonesia</h3>
+<h3 class="section-title">Kota Populer Indonesia</h3>
 <section class="city-cards" id="homeCityCards">
 {{range .Hotels}}
   <a class="city-card city-link" href="/hotels?city={{.City}}" data-city="{{.City}}" data-hotel="{{.Name}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
     <img src="{{.Image}}" alt="{{.City}}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/cityfallback/1200/800'">
     <div class="city-overlay">
       <h4>{{.City}}</h4>
-      <p>Hotel di {{.City}} mulai dari Rp {{printf "%d" .ID}}90.000/malam</p>
+      <p>Udara sejuk, kuliner, dan kreativitas</p>
+      <span class="city-overlay-cta">Lihat 10 hotel di {{.City}}</span>
     </div>
   </a>
 {{end}}
