@@ -1,0 +1,53 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{.Title}} - Admin StayNusa</title>
+  <link rel="stylesheet" href="/assets/css/style.css"/>
+</head>
+<body class="admin-body">
+<div class="admin-app-shell">
+  <aside class="admin-sidebar-v2">
+    <div class="admin-brand">
+      <div class="admin-brand-icon">🏨</div>
+      <div>
+        <strong>StayNusa</strong>
+        <small>Admin Control Center</small>
+      </div>
+    </div>
+
+    <nav class="admin-nav-v2">
+      <a href="/admin" class="active">Dashboard</a>
+      <a href="/admin/users">Manajemen User</a>
+      <a href="/hotels">Katalog Hotel</a>
+      <a href="/payment">Payment Monitor</a>
+      <a href="#notif">Notifikasi ({{.AdminNotifCount}})</a>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <a href="/staff">Buka Panel Staff</a>
+      <a href="/">Kembali ke User App</a>
+    </div>
+  </aside>
+
+  <div class="admin-main-v2">
+    <header class="admin-topbar-v2">
+      <div>
+        <h1>{{.Title}}</h1>
+        <p>Live command center untuk operasional hotel, booking, dan performa layanan.</p>
+      </div>
+      <div class="admin-top-actions">
+        <button class="btn secondary" type="button">Export Report</button>
+        <button class="btn" type="button">+ Buat Pengumuman</button>
+      </div>
+    </header>
+
+    <main class="admin-content-v2">{{template "content" .}}</main>
+  </div>
+</div>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>
+{{end}}

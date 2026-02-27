@@ -1,0 +1,55 @@
+{{define "content"}}
+<section class="hero city-hero" id="city-hero" style="background-image:linear-gradient(120deg, rgba(14,77,146,.84), rgba(0,169,255,.75)), url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80')">
+  <div>
+    <h1>Jelajahi Hotel di Kota Ikonik Indonesia</h1>
+    <p>Pilih kota untuk masuk ke halaman baru pemilihan hotel kota tersebut.</p>
+  </div>
+</section>
+
+<section class="smart-search-strip home-search-strip home-search-wrap">
+  <label class="home-search-field" id="homeCityLauncher">
+    <span>📍</span>
+    <input id="homeSearchInput" placeholder="Kota, hotel, tempat wisata" autocomplete="off">
+  </label>
+  <button class="smart-chip" id="homeDateChip" type="button">📅 Pilih tanggal menginap</button>
+  <button class="smart-chip" id="homeGuestChip" type="button">👥 2 Dewasa, 1 Kamar</button>
+  <button class="btn smart-search-btn" id="homeSearchBtn" type="button">Cari Hotel</button>
+
+  <section id="home-search-popup" class="home-search-dropdown hidden">
+    <h4>Pilih kota tujuan</h4>
+    <div id="homeSearchSuggestionList" class="suggestion-list"></div>
+  </section>
+</section>
+
+<section class="home-grid">
+  <div class="map-small">
+    <h3>Map Lokasi Hotel</h3>
+    <iframe id="main-city-map" src="https://maps.google.com/maps?q=-2.548926,118.014863&z=5&output=embed" loading="lazy"></iframe>
+  </div>
+  <div class="comment-box">
+    <h3>Komentar Tamu</h3>
+    <p>⭐ "Pelayanannya cepat, check-in hanya 5 menit."</p>
+    <p>⭐ "Kamar bersih dan map lokasi akurat sesuai kotanya."</p>
+    <p>⭐ "Cocok untuk liburan keluarga dan perjalanan kerja."</p>
+  </div>
+</section>
+
+<h3 class="section-title">Kota Populer Indonesia</h3>
+<section class="city-cards" id="homeCityCards">
+{{range .Hotels}}
+  <a class="city-card city-link" href="/hotels?city={{.City}}" data-city="{{.City}}" data-hotel="{{.Name}}" data-image="{{.Image}}" data-map="{{.MapEmbedURL}}">
+    <img src="{{.Image}}" alt="{{.City}}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/cityfallback/1200/800'">
+    <div class="city-overlay">
+      <span class="city-center-name">{{.City}}</span>
+      <div class="city-overlay-content">
+        <h4>{{.City}}</h4>
+        <p>Udara sejuk, kuliner, dan kreativitas</p>
+        <span class="city-overlay-cta">Lihat 10 hotel di {{.City}}</span>
+      </div>
+    </div>
+  </a>
+{{end}}
+</section>
+
+<div id="hotel-popup" class="popup hidden"><div class="popup-content"><p id="popup-text"></p><button onclick="closePopup()">Tutup</button></div></div>
+{{end}}

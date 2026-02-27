@@ -1,0 +1,29 @@
+{{define "content"}}
+<section class="admin-shell-v2">
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Operasional Kamar per Kota</h3><span class="tag">Room Status Desk</span></div>
+    <p class="muted">Data kamar dipisah per kota agar monitoring operasional staff lebih rapi dan mudah dibaca.</p>
+
+    {{range .CityOrder}}
+    <div class="city-section-block">
+      <h4>{{.}}</h4>
+      <table class="admin-table">
+        <thead><tr><th>ID Kamar</th><th>Tipe</th><th>Harga</th><th>Kapasitas</th><th>Stok Tersisa</th><th>Status Operasional</th></tr></thead>
+        <tbody>
+        {{range index $.RoomsByCity .}}
+        <tr>
+          <td>{{.ID}}</td>
+          <td>{{.Type}}</td>
+          <td>Rp {{.PricePerNight}}</td>
+          <td>{{.Capacity}} Tamu</td>
+          <td>{{.Stock}} kamar</td>
+          <td>{{if eq .Stock 0}}Occupied{{else if le .Stock 1}}Cleaning{{else}}Available{{end}}</td>
+        </tr>
+        {{end}}
+        </tbody>
+      </table>
+    </div>
+    {{end}}
+  </section>
+</section>
+{{end}}
