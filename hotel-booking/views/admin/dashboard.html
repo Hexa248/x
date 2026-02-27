@@ -43,32 +43,28 @@
   </section>
 
   <section class="admin-panel-v2">
-    <div class="panel-head"><h3>Tugas Admin Hotel</h3><span class="tag">Kontrol Penuh</span></div>
-    <div class="task-grid">
-      <article><h4>1. Manajemen User</h4><ul><li>Melihat semua user</li><li>Tambah / edit / hapus user</li><li>Atur role admin/staff/customer</li><li>Reset password</li></ul></article>
-      <article><h4>2. Manajemen Hotel</h4><ul><li>Tambah hotel baru</li><li>Edit detail hotel</li><li>Upload foto hotel</li><li>Hapus hotel</li></ul></article>
-      <article><h4>3. Manajemen Kamar</h4><ul><li>Tambah tipe kamar</li><li>Atur harga kamar</li><li>Atur stok kamar tersedia</li><li>Edit fasilitas kamar</li></ul></article>
-      <article><h4>4. Monitoring Booking</h4><ul><li>Lihat semua booking</li><li>Batalkan booking</li><li>Approve booking manual</li></ul></article>
-      <article><h4>5. Laporan & Statistik</h4><ul><li>Total booking</li><li>Total pendapatan</li><li>Grafik okupansi kamar</li><li>Laporan bulanan</li></ul></article>
-      <article><h4>6. Pengaturan Sistem</h4><ul><li>Setting pajak</li><li>Setting diskon</li><li>Konfigurasi pembayaran</li></ul></article>
-    </div>
-  </section>
-
-  <section class="admin-panel-v2">
     <div class="panel-head"><h3>Hotel Directory per Kota</h3><span class="tag">Master Data</span></div>
-    {{range .CityOrder}}
-    <div class="city-section-block">
-      <h4>{{.}}</h4>
-      <table class="admin-table">
-        <thead><tr><th>ID</th><th>Nama Hotel</th><th>Kota</th><th>Rating</th><th>Aksi</th></tr></thead>
-        <tbody>
-        {{range index $.HotelsByCity .}}
-        <tr><td>{{.ID}}</td><td>{{.Name}}</td><td>{{.City}}</td><td>{{printf "%.1f" .Rating}}</td><td><a href="/hotel?id={{.ID}}">Detail</a></td></tr>
-        {{end}}
-        </tbody>
-      </table>
+    <div class="city-admin-grid">
+      {{range .CityOrder}}
+      <article class="city-admin-card">
+        <div class="city-admin-head">
+          <h4>{{.}}</h4>
+          <span>{{len (index $.HotelsByCity .)}} hotel</span>
+        </div>
+        <div class="city-admin-list">
+          {{range index $.HotelsByCity .}}
+          <div class="city-admin-item">
+            <div>
+              <strong>{{.Name}}</strong>
+              <small>Rating {{printf "%.1f" .Rating}}</small>
+            </div>
+            <a href="/hotel?id={{.ID}}">Lihat Detail</a>
+          </div>
+          {{end}}
+        </div>
+      </article>
+      {{end}}
     </div>
-    {{end}}
   </section>
 </section>
 {{end}}

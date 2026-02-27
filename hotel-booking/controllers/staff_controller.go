@@ -29,6 +29,8 @@ type StaffDashboardData struct {
 	RecentBookings   []StaffBookingRow
 	Notifications    []models.Notification
 	StaffNotifCount  int
+	HotelsByCity     map[string][]models.Hotel
+	CityOrder        []string
 }
 
 func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
@@ -68,6 +70,16 @@ func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
 		})
 	}
 
+	hotelsByCity := make(map[string][]models.Hotel)
+	for _, h := range a.DB.Hotels {
+		hotelsByCity[h.City] = append(hotelsByCity[h.City], h)
+	}
+	cityOrder := make([]string, 0, len(hotelsByCity))
+	for city := range hotelsByCity {
+		cityOrder = append(cityOrder, city)
+	}
+	sort.Strings(cityOrder)
+
 	staffNotifs := notificationsByRole(a.DB.Notifications, models.RoleStaff)
 	data := StaffDashboardData{
 		Title:            "Staff Hotel Dashboard",
@@ -82,6 +94,8 @@ func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
 		RecentBookings:   recent,
 		Notifications:    staffNotifs,
 		StaffNotifCount:  len(staffNotifs),
+		HotelsByCity:     hotelsByCity,
+		CityOrder:        cityOrder,
 	}
 	render(w, "staff/dashboard.html", data)
 }

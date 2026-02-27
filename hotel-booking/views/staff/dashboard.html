@@ -32,6 +32,31 @@
     </article>
   </section>
 
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Hotel per Kota (Staff View)</h3><span class="tag">Operasional Area</span></div>
+    <div class="city-admin-grid">
+      {{range .CityOrder}}
+      <article class="city-admin-card">
+        <div class="city-admin-head">
+          <h4>{{.}}</h4>
+          <span>{{len (index $.HotelsByCity .)}} hotel</span>
+        </div>
+        <div class="city-admin-list">
+          {{range index $.HotelsByCity .}}
+          <div class="city-admin-item">
+            <div>
+              <strong>{{.Name}}</strong>
+              <small>Rating {{printf "%.1f" .Rating}}</small>
+            </div>
+            <a href="/hotel?id={{.ID}}">Lihat Detail</a>
+          </div>
+          {{end}}
+        </div>
+      </article>
+      {{end}}
+    </div>
+  </section>
+
   <section id="staff-tasks" class="admin-panel-v2">
     <div class="panel-head"><h3>Tugas Staff Hotel</h3><span class="tag">Operasional Harian</span></div>
     <div class="task-grid">
