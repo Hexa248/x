@@ -132,11 +132,14 @@
       <div>{{$room.Capacity}} 👤</div>
       <div>Rp {{$room.PricePerNight}}</div>
       <div>
-          <form action="/api/book" method="post" class="actions">
+          <form action="/api/book" method="post" class="actions booking-action-form">
             <input type="hidden" name="room_id" value="{{$room.ID}}">
             <input type="hidden" name="nights" value="1">
             <input type="hidden" name="guests" value="{{$room.Capacity}}">
-            <button class="btn" type="submit">Pesan</button>
+            <input type="text" name="promo_code" placeholder="Kode promo (contoh: JALANYUK)">
+            <label><input type="checkbox" name="service" value="room_service"> Room Service</label>
+            <label><input type="checkbox" name="service" value="laundry"> Laundry</label>
+            <button class="btn" type="submit">Pesan + Hitung Promo</button>
             <a class="btn secondary" href="/payment">Bayar</a>
           </form>
           <p class="left-stock">Sisa {{$room.Stock}} kamar!</p>

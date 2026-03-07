@@ -1,10 +1,10 @@
 {{define "content"}}
 <section class="admin-shell-v2">
   <section class="admin-kpi-grid-v2">
-    <article class="admin-kpi-card blue"><p>Total Booking</p><h3>{{.BookingsCount}}</h3><small>+12% vs minggu lalu</small></article>
-    <article class="admin-kpi-card cyan"><p>Total Payment</p><h3>{{.PaymentsCount}}</h3><small>Status pembayaran terhubung</small></article>
-    <article class="admin-kpi-card violet"><p>Hotel Aktif</p><h3>{{len .Hotels}}</h3><small>Lintas kota Indonesia</small></article>
-    <article class="admin-kpi-card dark"><p>Notifikasi Admin</p><h3>{{.AdminNotifCount}}</h3><small>Perlu tindak lanjut hari ini</small></article>
+    <article class="admin-kpi-card blue"><p>Total Booking</p><h3>{{.BookingsCount}}</h3><small>Termasuk booking aktif + histori</small></article>
+    <article class="admin-kpi-card cyan"><p>Total Pendapatan</p><h3>Rp {{.TotalRevenue}}</h3><small>Setelah refund otomatis</small></article>
+    <article class="admin-kpi-card violet"><p>Kamar Terisi</p><h3>{{.OccupiedRooms}}</h3><small>Occupancy realtime</small></article>
+    <article class="admin-kpi-card dark"><p>Hotel Terlaris</p><h3>{{.TopHotelName}}</h3><small>{{.TopHotelBookings}} booking</small></article>
   </section>
 
   <section class="admin-main-grid-v2">

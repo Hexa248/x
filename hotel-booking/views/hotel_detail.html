@@ -30,6 +30,10 @@
       </div>
     </div>
     <h2>{{.Hotel.Name}}</h2>
+    <form action="/api/wishlist/toggle" method="post" class="actions">
+      <input type="hidden" name="hotel_id" value="{{.Hotel.ID}}">
+      <button class="btn secondary" type="submit">Tambah / Hapus Wishlist</button>
+    </form>
     <p>{{.Hotel.Description}}</p>
   </section>
 
@@ -76,7 +80,15 @@
 
   <section id="review" class="info-section">
     <h3>Review</h3>
-    {{range .Hotel.Comments}}<p>⭐ {{.Author}}: {{.Message}}</p>{{end}}
+    {{range .Hotel.Comments}}<p>⭐ {{.Author}} ({{.Score}}/5): {{.Message}}</p>{{end}}
+    <form action="/api/review" method="post" class="admin-panel-v2" style="margin-top:12px;">
+      <input type="hidden" name="hotel_id" value="{{.Hotel.ID}}">
+      <h4>Tulis Review Anda</h4>
+      <label>Nama <input type="text" name="author" placeholder="Nama"></label>
+      <label>Rating (1-5) <input type="number" min="1" max="5" value="5" name="score"></label>
+      <label>Ulasan <textarea name="message" rows="3" placeholder="Bagaimana pengalaman menginap Anda?"></textarea></label>
+      <button class="btn" type="submit">Kirim Review</button>
+    </form>
   </section>
 </article>
 {{end}}

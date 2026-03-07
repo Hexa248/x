@@ -474,6 +474,7 @@ if(hotelListing){
   const floatCityText=document.getElementById('floatCityText');
   const floatDateText=document.getElementById('floatDateText');
   const floatGuestText=document.getElementById('floatGuestText');
+  const sortHotels=document.getElementById('sortHotels');
 
   const formatIDR=(v)=>`IDR ${Number(v).toLocaleString('id-ID')}`;
   const state={
@@ -566,7 +567,7 @@ if(hotelListing){
     const facilities=tagFilters('facility');
     const keyword=(state.city||'').toLowerCase();
 
-    let visible=0;
+    const visibleCards=[];
     cards.forEach(card=>{
       const city=(card.dataset.city||'').toLowerCase();
       const name=(card.dataset.name||'').toLowerCase();
@@ -587,9 +588,22 @@ if(hotelListing){
 
       const show=keywordMatch && starMatch && ratingMatch && priceMatch && typeMatch && promoMatch && facilityMatch;
       card.classList.toggle('hidden', !show);
-      if(show) visible+=1;
+      if(show) visibleCards.push(card);
     });
 
+    const mode=sortHotels?.value || 'default';
+    const sorter=(a,b)=>{
+      const pa=Number(a.dataset.price||0), pb=Number(b.dataset.price||0);
+      const ra=Number(a.dataset.rating||0), rb=Number(b.dataset.rating||0);
+      if(mode==='price_asc') return pa-pb;
+      if(mode==='price_desc') return pb-pa;
+      if(mode==='rating_desc') return rb-ra;
+      if(mode==='rating_asc') return ra-rb;
+      return 0;
+    };
+    visibleCards.sort(sorter).forEach(card=>hotelListing.appendChild(card));
+
+    const visible=visibleCards.length;
     if(summary){
       summary.textContent=visible>0 ? `Menampilkan ${visible} hotel sesuai pencarian & filter aktif.` : 'Tidak ada hasil, coba ubah filter atau kata kunci.';
     }
@@ -743,6 +757,7 @@ if(hotelListing){
   document.querySelectorAll('.split-scroll-pane').forEach(p=>p.addEventListener('scroll', handlePaneScroll, {passive:true}));
 
   [priceMin, priceMax].forEach(el=>el?.addEventListener('input',applyFilters));
+  sortHotels?.addEventListener('change',applyFilters);
   document.querySelectorAll('input[data-filter]').forEach(el=>el.addEventListener('change',applyFilters));
   smartSearchBtn?.addEventListener('click',applyFilters);
   floatSearchBtn?.addEventListener('click',applyFilters);
@@ -869,6 +884,24 @@ if(bookingForms.length){
       }catch(err){
         showToast('Booking gagal diproses');
       }
+    });
+  });
+}
+
+const apiForms=[...document.querySelectorAll('form[action^="/api/"]')].filter(f=>!f.matches('form[action="/api/book"]'));
+if(apiForms.length){
+  const toast=document.getElementById('bookingToast');
+  const show=(msg)=>{ if(!toast) return; toast.textContent=msg; toast.classList.remove('hidden'); setTimeout(()=>toast.classList.add('hidden'),2200); };
+  apiForms.forEach(form=>{
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      try{
+        const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'X-Requested-With':'XMLHttpRequest','Accept':'application/json'}});
+        let data={};
+        try{ data=await res.json(); }catch(_){ data={message: await res.text()}; }
+        show(data.message || 'Aksi berhasil diproses');
+        setTimeout(()=>window.location.reload(),700);
+      }catch(_){ show('Aksi gagal diproses'); }
     });
   });
 }

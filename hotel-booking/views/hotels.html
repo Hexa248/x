@@ -35,6 +35,15 @@
         <h2>{{if .SelectedCity}}Rekomendasi Hotel di {{.SelectedCity}}{{else}}Pemilihan Hotel{{end}}</h2>
         <p id="hotelResultSummary">{{if .SelectedCity}}Menampilkan 5 hotel pilihan terbaik untuk kota {{.SelectedCity}}.{{else}}Pilih kota dari beranda untuk menampilkan hotel per kota.{{end}}</p>
       </div>
+      <label class="smart-chip">Urutkan
+        <select id="sortHotels">
+          <option value="default">Relevansi</option>
+          <option value="price_asc">Harga Termurah</option>
+          <option value="price_desc">Harga Tertinggi</option>
+          <option value="rating_desc">Rating Tertinggi</option>
+          <option value="rating_asc">Rating Terendah</option>
+        </select>
+      </label>
     </div>
 
     {{range .Hotels}}

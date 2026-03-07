@@ -163,15 +163,18 @@ func (db *InMemoryDB) CreateBooking(roomID, nights, guests int) (models.Room, mo
 		return db.Rooms[roomIdx], models.Booking{}, fmt.Errorf("stok kamar habis")
 	}
 	db.Rooms[roomIdx].Stock--
+	now := time.Now()
 	booking := models.Booking{
-		ID:       len(db.Bookings) + 1,
-		UserID:   3,
-		RoomID:   roomID,
-		Nights:   nights,
-		Guests:   guests,
-		Total:    db.Rooms[roomIdx].PricePerNight * nights,
-		Status:   "confirmed",
-		BookedAt: time.Now(),
+		ID:           len(db.Bookings) + 1,
+		UserID:       3,
+		RoomID:       roomID,
+		Nights:       nights,
+		Guests:       guests,
+		Total:        db.Rooms[roomIdx].PricePerNight * nights,
+		Status:       string(models.BookingConfirmed),
+		BookedAt:     now,
+		CheckInDate:  now.AddDate(0, 0, 1),
+		CheckOutDate: now.AddDate(0, 0, 1+nights),
 	}
 	db.Bookings = append(db.Bookings, booking)
 	if db.MySQL != nil {

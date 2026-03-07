@@ -12,10 +12,10 @@
     <article class="admin-panel-v2">
       <div class="panel-head"><h3>Operasional Booking</h3><span class="tag">Shift</span></div>
       <table class="admin-table">
-        <thead><tr><th>ID</th><th>Tanggal</th><th>Tamu</th><th>Durasi Awal</th><th>Sisa Durasi Hari Ini</th><th>Status</th></tr></thead>
+        <thead><tr><th>ID</th><th>Hotel/Kamar</th><th>Tanggal</th><th>Tamu</th><th>Durasi Awal</th><th>Sisa Durasi Hari Ini</th><th>Status</th><th>Aksi Staff</th></tr></thead>
         <tbody>
         {{range .RecentBookings}}
-        <tr><td>#{{.ID}}</td><td>{{.BookedAt}}</td><td>{{.Guests}} orang</td><td>{{.Nights}} hari</td><td>{{.RemainingNights}} hari</td><td>{{.Status}}</td></tr>
+        <tr><td>#{{.ID}}</td><td>{{.HotelName}}<br><small>{{.RoomName}}</small></td><td>{{.BookedAt}}<br><small>{{.CheckInDate}} - {{.CheckOutDate}}</small></td><td>{{.Guests}} orang</td><td>{{.Nights}} hari</td><td>{{.RemainingNights}} hari</td><td>{{.Status}}</td><td><form action="/api/book/checkin" method="post" class="status-form" style="margin-bottom:6px;"><input type="hidden" name="booking_id" value="{{.ID}}"><button class="btn secondary" type="submit">Check-in</button></form><form action="/api/book/checkout" method="post" class="status-form"><input type="hidden" name="booking_id" value="{{.ID}}"><button class="btn" type="submit">Check-out</button></form></td></tr>
         {{end}}
         </tbody>
       </table>

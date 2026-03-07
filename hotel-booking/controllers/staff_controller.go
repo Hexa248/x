@@ -15,6 +15,10 @@ type StaffBookingRow struct {
 	Nights          int
 	RemainingNights int
 	BookedAt        string
+	HotelName       string
+	RoomName        string
+	CheckInDate     string
+	CheckOutDate    string
 }
 
 type StaffDashboardData struct {
@@ -41,23 +45,35 @@ func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
 	thisYear, thisWeek := now.ISOWeek()
 	monthStart := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
 
-	totalGuests := 0
-	totalNights := 0
-	thisWeekGuests := 0
-	thisWeekNights := 0
-	thisWeekBookings := 0
-	monthlyBookings := 0
-	thisMonthNights := 0
+	totalGuests, totalNights := 0, 0
+	thisWeekGuests, thisWeekNights, thisWeekBookings := 0, 0, 0
+	monthlyBookings, thisMonthNights := 0, 0
 
 	bookings := append([]models.Booking(nil), a.DB.Bookings...)
-	sort.Slice(bookings, func(i, j int) bool {
-		return bookings[i].BookedAt.After(bookings[j].BookedAt)
-	})
+	sort.Slice(bookings, func(i, j int) bool { return bookings[i].BookedAt.After(bookings[j].BookedAt) })
+
+	hotelByRoom := map[int]string{}
+	roomName := map[int]string{}
+	for _, room := range a.DB.Rooms {
+		roomName[room.ID] = room.Name
+		for _, h := range a.DB.Hotels {
+			if h.ID == room.HotelID {
+				hotelByRoom[room.ID] = h.Name
+				break
+			}
+		}
+	}
 
 	remainingFor := func(b models.Booking) int {
-		elapsed := int(now.Truncate(24*time.Hour).Sub(b.BookedAt.Truncate(24*time.Hour)).Hours() / 24)
+		elapsed := int(now.Truncate(24*time.Hour).Sub(b.CheckInDate.Truncate(24*time.Hour)).Hours() / 24)
+		if elapsed < 0 {
+			elapsed = 0
+		}
 		rem := b.Nights - elapsed
 		if rem < 0 {
+			return 0
+		}
+		if b.Status == string(models.BookingCheckedOut) || b.Status == string(models.BookingCancelled) {
 			return 0
 		}
 		return rem
@@ -87,6 +103,10 @@ func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
 			Nights:          b.Nights,
 			RemainingNights: remainingFor(b),
 			BookedAt:        b.BookedAt.Format("02 Jan 2006"),
+			HotelName:       hotelByRoom[b.RoomID],
+			RoomName:        roomName[b.RoomID],
+			CheckInDate:     b.CheckInDate.Format("02 Jan 2006"),
+			CheckOutDate:    b.CheckOutDate.Format("02 Jan 2006"),
 		})
 	}
 

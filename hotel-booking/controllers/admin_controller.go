@@ -33,6 +33,10 @@ type AdminDashboardData struct {
 	CityOrder        []string
 	RoomStockRows    []AdminRoomStockRow
 	LastStockMessage string
+	TotalRevenue     int
+	OccupiedRooms    int
+	TopHotelName     string
+	TopHotelBookings int
 }
 
 func (a *App) AdminPage(w http.ResponseWriter, r *http.Request) {
@@ -50,19 +54,11 @@ func (a *App) AdminPage(w http.ResponseWriter, r *http.Request) {
 	sort.Strings(cityOrder)
 
 	roomRows := make([]AdminRoomStockRow, 0, len(a.DB.Rooms))
+	totalStock := 0
 	for _, room := range a.DB.Rooms {
 		h := hotelByID[room.HotelID]
-		roomRows = append(roomRows, AdminRoomStockRow{
-			RoomID:    room.ID,
-			HotelID:   room.HotelID,
-			HotelName: h.Name,
-			City:      h.City,
-			RoomName:  room.Name,
-			RoomType:  room.Type,
-			Stock:     room.Stock,
-			Capacity:  room.Capacity,
-			Beds:      room.Beds,
-		})
+		totalStock += room.Stock
+		roomRows = append(roomRows, AdminRoomStockRow{RoomID: room.ID, HotelID: room.HotelID, HotelName: h.Name, City: h.City, RoomName: room.Name, RoomType: room.Type, Stock: room.Stock, Capacity: room.Capacity, Beds: room.Beds})
 	}
 	sort.Slice(roomRows, func(i, j int) bool {
 		if roomRows[i].City != roomRows[j].City {
@@ -73,6 +69,34 @@ func (a *App) AdminPage(w http.ResponseWriter, r *http.Request) {
 		}
 		return roomRows[i].RoomName < roomRows[j].RoomName
 	})
+
+	revenue := 0
+	hotelCounts := map[int]int{}
+	for _, b := range a.DB.Bookings {
+		if b.Status == string(models.BookingCancelled) {
+			revenue -= b.RefundAmount
+			continue
+		}
+		revenue += b.Total
+		for _, room := range a.DB.Rooms {
+			if room.ID == b.RoomID {
+				hotelCounts[room.HotelID]++
+				break
+			}
+		}
+	}
+	topHotelName := "-"
+	topHotelBookings := 0
+	for hotelID, cnt := range hotelCounts {
+		if cnt > topHotelBookings {
+			topHotelBookings = cnt
+			topHotelName = hotelByID[hotelID].Name
+		}
+	}
+	occupied := (len(a.DB.Rooms) * 10) - totalStock
+	if occupied < 0 {
+		occupied = 0
+	}
 
 	data := AdminDashboardData{
 		Title:            "Admin Dashboard",
@@ -87,18 +111,17 @@ func (a *App) AdminPage(w http.ResponseWriter, r *http.Request) {
 		CityOrder:        cityOrder,
 		RoomStockRows:    roomRows,
 		LastStockMessage: r.URL.Query().Get("stock_message"),
+		TotalRevenue:     revenue,
+		OccupiedRooms:    occupied,
+		TopHotelName:     topHotelName,
+		TopHotelBookings: topHotelBookings,
 	}
 	render(w, "admin/dashboard.html", data)
 }
 
 func (a *App) AdminUsersPage(w http.ResponseWriter, _ *http.Request) {
 	adminNotifs := notificationsByRole(a.DB.Notifications, models.RoleAdmin)
-	data := map[string]any{
-		"Title":           "Manajemen User",
-		"Users":           a.DB.Users,
-		"Notifications":   adminNotifs,
-		"AdminNotifCount": len(adminNotifs),
-	}
+	data := map[string]any{"Title": "Manajemen User", "Users": a.DB.Users, "Notifications": adminNotifs, "AdminNotifCount": len(adminNotifs)}
 	render(w, "admin/users.html", data)
 }
 
@@ -116,11 +139,9 @@ func (a *App) UpdateRoomStock(w http.ResponseWriter, r *http.Request) {
 	if stock < 0 {
 		stock = 0
 	}
-	ok := a.DB.SetRoomStock(roomID, stock)
-	if !ok {
+	if ok := a.DB.SetRoomStock(roomID, stock); !ok {
 		http.Error(w, "kamar tidak ditemukan", http.StatusNotFound)
 		return
 	}
-	message := "Stok kamar berhasil diperbarui"
-	http.Redirect(w, r, "/admin?stock_message="+message, http.StatusFound)
+	http.Redirect(w, r, "/admin?stock_message=Stok kamar berhasil diperbarui", http.StatusFound)
 }

@@ -14,6 +14,9 @@ type InMemoryDB struct {
 	Bookings      []models.Booking
 	Payments      []models.Payment
 	Notifications []models.Notification
+	Promos        []models.Promo
+	Wishlists     []models.WishlistItem
+	ServiceOrders []models.ServiceOrder
 	MySQL         *MySQLSync
 }
 
@@ -23,6 +26,12 @@ func Seed() *InMemoryDB {
 		{ID: 1, Name: "Super Admin", Email: "admin@hotel.com", Password: "admin123", Role: models.RoleAdmin},
 		{ID: 2, Name: "Hotel Staff", Email: "staff@hotel.com", Password: "staff123", Role: models.RoleStaff},
 		{ID: 3, Name: "Guest User", Email: "user@hotel.com", Password: "user123", Role: models.RoleUser},
+	}
+
+	db.Promos = []models.Promo{
+		{Code: "JALANYUK", DiscountPct: 8, MaxDiscount: 100000, MinSpend: 300000, Description: "Diskon 8% max 100rb", Active: true},
+		{Code: "HEMAT10", DiscountPct: 10, MaxDiscount: 150000, MinSpend: 500000, Description: "Diskon 10% max 150rb", Active: true},
+		{Code: "STAYVIP", DiscountPct: 12, MaxDiscount: 220000, MinSpend: 900000, Description: "Diskon VIP 12%", Active: true},
 	}
 
 	cities := []string{"Jakarta", "Bandung", "Surabaya", "Yogyakarta", "Bali", "Lombok", "Medan", "Semarang", "Makassar", "Labuan Bajo", "Banda Aceh"}
@@ -102,12 +111,12 @@ func Seed() *InMemoryDB {
 
 	now := time.Now()
 	db.Bookings = []models.Booking{
-		{ID: 1, UserID: 3, RoomID: 1, Nights: 3, Guests: 2, Total: 6600000, Status: "confirmed", BookedAt: now.AddDate(0, 0, -1)},
-		{ID: 2, UserID: 3, RoomID: 4, Nights: 2, Guests: 1, Total: 2900000, Status: "confirmed", BookedAt: now.AddDate(0, 0, -2)},
-		{ID: 3, UserID: 3, RoomID: 7, Nights: 5, Guests: 3, Total: 10400000, Status: "paid", BookedAt: now.AddDate(0, 0, -3)},
-		{ID: 4, UserID: 3, RoomID: 10, Nights: 1, Guests: 2, Total: 780000, Status: "paid", BookedAt: now.AddDate(0, 0, -5)},
-		{ID: 5, UserID: 3, RoomID: 13, Nights: 4, Guests: 2, Total: 6200000, Status: "confirmed", BookedAt: now.AddDate(0, 0, -8)},
-		{ID: 6, UserID: 3, RoomID: 16, Nights: 2, Guests: 1, Total: 1560000, Status: "pending", BookedAt: now.AddDate(0, 0, -10)},
+		{ID: 1, UserID: 3, RoomID: 1, Nights: 3, Guests: 2, Total: 6600000, Status: string(models.BookingConfirmed), BookedAt: now.AddDate(0, 0, -1), CheckInDate: now.AddDate(0, 0, 1), CheckOutDate: now.AddDate(0, 0, 4)},
+		{ID: 2, UserID: 3, RoomID: 4, Nights: 2, Guests: 1, Total: 2900000, Status: string(models.BookingPaid), BookedAt: now.AddDate(0, 0, -2), CheckInDate: now.AddDate(0, 0, 0), CheckOutDate: now.AddDate(0, 0, 2)},
+		{ID: 3, UserID: 3, RoomID: 7, Nights: 5, Guests: 3, Total: 10400000, Status: string(models.BookingCheckedIn), BookedAt: now.AddDate(0, 0, -3), CheckInDate: now.AddDate(0, 0, -1), CheckOutDate: now.AddDate(0, 0, 4)},
+		{ID: 4, UserID: 3, RoomID: 10, Nights: 1, Guests: 2, Total: 780000, Status: string(models.BookingCheckedOut), BookedAt: now.AddDate(0, 0, -5), CheckInDate: now.AddDate(0, 0, -4), CheckOutDate: now.AddDate(0, 0, -3)},
+		{ID: 5, UserID: 3, RoomID: 13, Nights: 4, Guests: 2, Total: 6200000, Status: string(models.BookingCancelled), BookedAt: now.AddDate(0, 0, -8), CheckInDate: now.AddDate(0, 0, -6), CheckOutDate: now.AddDate(0, 0, -2), RefundAmount: 3000000},
+		{ID: 6, UserID: 3, RoomID: 16, Nights: 2, Guests: 1, Total: 1560000, Status: string(models.BookingPending), BookedAt: now.AddDate(0, 0, -10), CheckInDate: now.AddDate(0, 0, 2), CheckOutDate: now.AddDate(0, 0, 4)},
 	}
 
 	db.Notifications = []models.Notification{
@@ -117,7 +126,7 @@ func Seed() *InMemoryDB {
 
 	for i := range db.Bookings {
 		for r := range db.Rooms {
-			if db.Rooms[r].ID == db.Bookings[i].RoomID && db.Rooms[r].Stock > 0 {
+			if db.Bookings[i].Status != string(models.BookingCancelled) && db.Bookings[i].Status != string(models.BookingCheckedOut) && db.Rooms[r].ID == db.Bookings[i].RoomID && db.Rooms[r].Stock > 0 {
 				db.Rooms[r].Stock--
 				break
 			}

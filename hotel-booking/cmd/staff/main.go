@@ -28,6 +28,7 @@ func main() {
 		http.Redirect(w, r, "/staff", http.StatusFound)
 	})
 	routes.AuthRoutes(mux, app)
+	routes.BookingRoutes(mux, app)
 	routes.StaffRoutes(mux, app)
 	mux.HandleFunc("/hotel", app.HotelDetail)
 	mux.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))

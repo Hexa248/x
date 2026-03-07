@@ -28,6 +28,7 @@ func main() {
 		http.Redirect(w, r, "/admin", http.StatusFound)
 	})
 	routes.AuthRoutes(mux, app)
+	routes.BookingRoutes(mux, app)
 	routes.AdminRoutes(mux, app)
 	routes.PaymentRoutes(mux, app)
 	mux.HandleFunc("/hotels", app.HotelsPage)
