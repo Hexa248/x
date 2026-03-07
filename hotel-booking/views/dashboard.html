@@ -1,0 +1,55 @@
+{{define "content"}}
+<section class="admin-shell-v2">
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Booking Saya</h3><span class="tag">User Center</span></div>
+    <table class="admin-table">
+      <thead><tr><th>ID</th><th>Status</th><th>Check-in</th><th>Check-out</th><th>Total</th><th>Promo</th><th>Aksi</th></tr></thead>
+      <tbody>
+      {{range .Bookings}}
+      <tr>
+        <td>#{{.ID}}</td>
+        <td>{{.Status}}</td>
+        <td>{{.CheckIn}}</td>
+        <td>{{.CheckOut}}</td>
+        <td>Rp {{.Total}}</td>
+        <td>{{if .PromoCode}}{{.PromoCode}}{{else}}-{{end}}</td>
+        <td>
+          <form action="/api/book/cancel" method="post">
+            <input type="hidden" name="booking_id" value="{{.ID}}">
+            <button class="btn secondary" type="submit">Batalkan + Refund</button>
+          </form>
+        </td>
+      </tr>
+      {{else}}
+      <tr><td colspan="7">Belum ada booking.</td></tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Wishlist Hotel Favorit</h3><span class="tag">Saved</span></div>
+    <div class="quick-actions-grid">
+      {{range .WishlistHotels}}
+      <a class="quick-action" href="/hotel?id={{.ID}}">{{.Name}} • {{.City}}</a>
+      {{else}}
+      <p class="muted">Belum ada wishlist. Tambahkan dari halaman detail hotel.</p>
+      {{end}}
+    </div>
+  </section>
+
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Layanan Tambahan</h3><span class="tag">Room Service / Laundry</span></div>
+    <table class="admin-table">
+      <thead><tr><th>Booking ID</th><th>Layanan</th><th>Qty</th><th>Biaya</th></tr></thead>
+      <tbody>
+      {{range .ServiceOrders}}
+      <tr><td>#{{.BookingID}}</td><td>{{.ServiceName}}</td><td>{{.Qty}}</td><td>Rp {{.Amount}}</td></tr>
+      {{else}}
+      <tr><td colspan="4">Belum ada layanan tambahan.</td></tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+</section>
+{{end}}

@@ -1,0 +1,1 @@
+Konfigurasi Nginx reverse proxy.

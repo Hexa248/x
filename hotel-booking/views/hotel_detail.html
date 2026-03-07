@@ -1,0 +1,94 @@
+{{define "content"}}
+<article class="detail">
+  <div class="sticky-tabs" id="stickyTabs">
+    <div class="sticky-tabs-links">
+      <a href="#info" class="tab-anchor active">Info Umum</a>
+      <a href="#kamar" class="tab-anchor">Kamar</a>
+      <a href="#lokasi" class="tab-anchor">Lokasi</a>
+      <a href="#fasilitas" class="tab-anchor">Fasilitas</a>
+      <a href="#kebijakan" class="tab-anchor">Kebijakan</a>
+      <a href="#review" class="tab-anchor">Review</a>
+      <span class="tab-indicator" aria-hidden="true"></span>
+    </div>
+    <div class="sticky-tabs-actions">
+      <a href="#">Copy link</a>
+      <span>·</span>
+      <a href="#">Simpan akomodasi</a>
+      <span>·</span>
+      <a href="#info">Kembali ke Atas</a>
+    </div>
+  </div>
+
+  <section id="info" class="info-section">
+    <div class="detail-hero-grid">
+      <img src="{{.Hotel.Image}}" alt="{{.Hotel.Name}}">
+      <div class="detail-mini-grid">
+        <img src="{{.Hotel.Image}}" alt="{{.Hotel.Name}}">
+        <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=80" alt="Interior">
+        <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=900&q=80" alt="Room">
+        <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=900&q=80" alt="Facility">
+      </div>
+    </div>
+    <h2>{{.Hotel.Name}}</h2>
+    <form action="/api/wishlist/toggle" method="post" class="actions">
+      <input type="hidden" name="hotel_id" value="{{.Hotel.ID}}">
+      <button class="btn secondary" type="submit">Tambah / Hapus Wishlist</button>
+    </form>
+    <p>{{.Hotel.Description}}</p>
+  </section>
+
+  <section id="kamar" class="info-section">
+    <h3>Pilih kamar sesuai kebutuhan</h3>
+    <p>Setiap tipe kamar bisa langsung dipilih dari halaman ini atau lanjut ke halaman booking lengkap.</p>
+    <div class="room-table-wrap">
+      <div class="room-table-head">
+        <span>Pilihan Kamar</span><span>Tamu</span><span>Harga/kamar/malam</span><span>Aksi</span>
+      </div>
+      {{range .Rooms}}
+      <div class="room-row">
+        <div>
+          <strong>{{.Name}} - {{.Type}}</strong>
+          <p>{{range $i, $f := .Facilities}}{{if $i}} • {{end}}{{$f}}{{end}}</p>
+        </div>
+        <div>{{.Capacity}} 👤</div>
+        <div>Rp {{.PricePerNight}}</div>
+        <div class="actions">
+          <form action="/api/book" method="post" class="actions">
+            <input type="hidden" name="room_id" value="{{.ID}}">
+            <input type="hidden" name="nights" value="1">
+            <input type="hidden" name="guests" value="{{.Capacity}}">
+            <button class="btn" type="submit">Pesan</button>
+          </form>
+          <a class="btn secondary" href="/booking?hotel={{$.Hotel.ID}}">Detail Booking</a>
+        </div>
+      </div>
+      {{end}}
+    </div>
+  </section>
+
+  <section id="lokasi" class="info-section">
+    <h3>Lokasi Hotel</h3>
+    <iframe src="{{.Hotel.MapEmbedURL}}" loading="lazy"></iframe>
+  </section>
+
+  <section id="fasilitas" class="info-section">
+    <h3>Fasilitas Utama</h3>
+    <ul><li>WiFi cepat</li><li>Resepsionis 24 jam</li><li>Parkir</li><li>Restoran</li></ul>
+  </section>
+
+  <section id="kebijakan" class="info-section"><h3>Kebijakan</h3><p>Check-in 14:00, check-out 12:00, pembatalan sesuai tipe kamar.</p></section>
+
+  <section id="review" class="info-section">
+    <h3>Review</h3>
+    {{range .Hotel.Comments}}<p>⭐ {{.Author}} ({{.Score}}/5): {{.Message}}</p>{{end}}
+    <form action="/api/review" method="post" class="admin-panel-v2" style="margin-top:12px;">
+      <input type="hidden" name="hotel_id" value="{{.Hotel.ID}}">
+      <h4>Tulis Review Anda</h4>
+      <label>Nama <input type="text" name="author" placeholder="Nama"></label>
+      <label>Rating (1-5) <input type="number" min="1" max="5" value="5" name="score"></label>
+      <label>Ulasan <textarea name="message" rows="3" placeholder="Bagaimana pengalaman menginap Anda?"></textarea></label>
+      <button class="btn" type="submit">Kirim Review</button>
+    </form>
+  </section>
+</article>
+{{end}}

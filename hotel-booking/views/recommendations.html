@@ -1,0 +1,35 @@
+{{define "content"}}
+<section class="recommendation-head">
+  <h1>Pilihan Rekomendasi Hotel</h1>
+  <p>Semua rekomendasi ada dalam satu halaman. Saat kamu scroll, kartu informasi aktif akan otomatis berpindah.</p>
+</section>
+
+<div class="reco-layout">
+  <aside class="reco-sidebar" id="recoSidebar">
+    {{range .Hotels}}
+      <a class="reco-link {{if eq .ID 1}}active{{end}}" href="#hotel-{{.ID}}">{{.City}} · {{.Name}}</a>
+    {{end}}
+  </aside>
+
+  <section class="reco-stream">
+    {{range .Hotels}}
+      <article id="hotel-{{.ID}}" class="reco-card info-section">
+        <div class="reco-grid">
+          <img src="{{.Image}}" alt="{{.Name}}">
+          <div>
+            <p class="mini-tag">{{.Tagline}}</p>
+            <h2>{{.Name}} - {{.City}}</h2>
+            <p>Rating {{printf "%.1f" .Rating}}/5.0 · {{.Story}}</p>
+            <p><strong>{{.Highlight}}</strong></p>
+            <p>“Kami menginap 2 malam, kamarnya wangi, staf sigap, dan proses check-in sangat cepat. Lokasinya juga dekat spot wisata kota.” — Ulasan tamu terverifikasi</p>
+            <div class="actions">
+              <a class="btn" href="/hotel?id={{.ID}}">Lihat Info Hotel</a>
+              <a class="btn secondary" href="/booking?hotel={{.ID}}">Pilih Kamar</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    {{end}}
+  </section>
+</div>
+{{end}}
