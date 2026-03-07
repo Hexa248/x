@@ -19,6 +19,15 @@
     <h4>Pilih kota tujuan</h4>
     <div id="homeSearchSuggestionList" class="suggestion-list"></div>
   </section>
+
+  <section id="home-inline-popup" class="home-inline-popup hidden">
+    <h4 id="homeInlinePopupTitle">Atur pencarian</h4>
+    <div id="homeInlinePopupBody"></div>
+    <div class="actions">
+      <button class="btn secondary" id="homeInlineCancel" type="button">Batal</button>
+      <button class="btn" id="homeInlineApply" type="button">Terapkan</button>
+    </div>
+  </section>
 </section>
 
 <section class="home-grid">
@@ -52,4 +61,5 @@
 </section>
 
 <div id="hotel-popup" class="popup hidden"><div class="popup-content"><p id="popup-text"></p><button onclick="closePopup()">Tutup</button></div></div>
+<div id="bookingToast" class="booking-toast hidden"></div>
 {{end}}

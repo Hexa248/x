@@ -9,11 +9,12 @@ import (
 )
 
 type StaffBookingRow struct {
-	ID       int
-	Status   string
-	Guests   int
-	Nights   int
-	BookedAt string
+	ID              int
+	Status          string
+	Guests          int
+	Nights          int
+	RemainingNights int
+	BookedAt        string
 }
 
 type StaffDashboardData struct {
@@ -21,11 +22,13 @@ type StaffDashboardData struct {
 	Hotels           []models.Hotel
 	Rooms            []models.Room
 	BookingsCount    int
+	MonthlyBookings  int
 	TotalGuests      int
 	TotalNights      int
 	ThisWeekGuests   int
 	ThisWeekNights   int
 	ThisWeekBookings int
+	ThisMonthNights  int
 	RecentBookings   []StaffBookingRow
 	Notifications    []models.Notification
 	StaffNotifCount  int
@@ -36,17 +39,29 @@ type StaffDashboardData struct {
 func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
 	now := time.Now()
 	thisYear, thisWeek := now.ISOWeek()
+	monthStart := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, now.Location())
 
 	totalGuests := 0
 	totalNights := 0
 	thisWeekGuests := 0
 	thisWeekNights := 0
 	thisWeekBookings := 0
+	monthlyBookings := 0
+	thisMonthNights := 0
 
 	bookings := append([]models.Booking(nil), a.DB.Bookings...)
 	sort.Slice(bookings, func(i, j int) bool {
 		return bookings[i].BookedAt.After(bookings[j].BookedAt)
 	})
+
+	remainingFor := func(b models.Booking) int {
+		elapsed := int(now.Truncate(24*time.Hour).Sub(b.BookedAt.Truncate(24*time.Hour)).Hours() / 24)
+		rem := b.Nights - elapsed
+		if rem < 0 {
+			return 0
+		}
+		return rem
+	}
 
 	for _, b := range bookings {
 		totalGuests += b.Guests
@@ -57,16 +72,21 @@ func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
 			thisWeekGuests += b.Guests
 			thisWeekNights += b.Nights
 		}
+		if !b.BookedAt.Before(monthStart) {
+			monthlyBookings++
+			thisMonthNights += b.Nights
+		}
 	}
 
 	recent := make([]StaffBookingRow, 0, len(bookings))
 	for _, b := range bookings {
 		recent = append(recent, StaffBookingRow{
-			ID:       b.ID,
-			Status:   b.Status,
-			Guests:   b.Guests,
-			Nights:   b.Nights,
-			BookedAt: b.BookedAt.Format("02 Jan 2006"),
+			ID:              b.ID,
+			Status:          b.Status,
+			Guests:          b.Guests,
+			Nights:          b.Nights,
+			RemainingNights: remainingFor(b),
+			BookedAt:        b.BookedAt.Format("02 Jan 2006"),
 		})
 	}
 
@@ -86,11 +106,13 @@ func (a *App) StaffDashboardPage(w http.ResponseWriter, _ *http.Request) {
 		Hotels:           a.DB.Hotels,
 		Rooms:            a.DB.Rooms,
 		BookingsCount:    len(bookings),
+		MonthlyBookings:  monthlyBookings,
 		TotalGuests:      totalGuests,
 		TotalNights:      totalNights,
 		ThisWeekGuests:   thisWeekGuests,
 		ThisWeekNights:   thisWeekNights,
 		ThisWeekBookings: thisWeekBookings,
+		ThisMonthNights:  thisMonthNights,
 		RecentBookings:   recent,
 		Notifications:    staffNotifs,
 		StaffNotifCount:  len(staffNotifs),

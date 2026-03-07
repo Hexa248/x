@@ -33,3 +33,20 @@ Run package checks with:
 ```bash
 go test ./...
 ```
+
+## Optional MySQL sync
+
+You can mirror stock/booking updates to MySQL using the `mysql` CLI (optional).
+
+Set environment variables before running any app:
+
+```bash
+export MYSQL_SYNC_ENABLED=true
+export MYSQL_HOST=127.0.0.1
+export MYSQL_PORT=3306
+export MYSQL_USER=root
+export MYSQL_PASSWORD=your_password
+export MYSQL_DATABASE=hotel_booking
+```
+
+When enabled, the app initializes tables (`hotels`, `rooms`, `bookings`) and syncs stock + booking changes automatically.

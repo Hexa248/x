@@ -14,6 +14,7 @@ type InMemoryDB struct {
 	Bookings      []models.Booking
 	Payments      []models.Payment
 	Notifications []models.Notification
+	MySQL         *MySQLSync
 }
 
 func Seed() *InMemoryDB {
@@ -121,6 +122,11 @@ func Seed() *InMemoryDB {
 				break
 			}
 		}
+	}
+
+	if db.MySQL = NewMySQLSyncFromEnv(); db.MySQL != nil {
+		db.MySQL.InitSchema()
+		db.MySQL.SyncHotelsAndRooms(db.Hotels, db.Rooms)
 	}
 
 	return db

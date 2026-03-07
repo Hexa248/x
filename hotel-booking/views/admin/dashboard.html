@@ -37,7 +37,7 @@
         <a class="quick-action" href="/admin/users">Kelola user & role</a>
         <a class="quick-action" href="/hotels">Audit data hotel</a>
         <a class="quick-action" href="/payment">Pantau pembayaran</a>
-        <a class="quick-action" href="/staff">Sync ke staff desk</a>
+        <a class="quick-action" href="http://localhost:8082/staff">Sync ke staff desk</a>
       </div>
     </article>
   </section>
@@ -63,6 +63,25 @@
           {{end}}
         </div>
       </article>
+      {{end}}
+    </div>
+  </section>
+
+
+  <section class="admin-panel-v2">
+    <div class="panel-head"><h3>Pengaturan Stok Kamar per Hotel</h3><span class="tag">Realtime Stock Control</span></div>
+    {{if .LastStockMessage}}<p class="muted">{{.LastStockMessage}}</p>{{end}}
+    <div class="stock-grid">
+      {{range .RoomStockRows}}
+      <form class="stock-row" action="/admin/stock/update" method="post">
+        <div>
+          <strong>{{.HotelName}}</strong>
+          <small>{{.City}} • {{.RoomName}} ({{.RoomType}}) • {{.Capacity}} tamu • {{.Beds}} kasur</small>
+        </div>
+        <input type="hidden" name="room_id" value="{{.RoomID}}">
+        <input type="number" name="stock" min="0" value="{{.Stock}}" aria-label="Stok kamar {{.RoomName}}">
+        <button class="btn" type="submit">Simpan Stok</button>
+      </form>
       {{end}}
     </div>
   </section>

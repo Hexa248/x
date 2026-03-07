@@ -4,17 +4,18 @@
     <article class="admin-kpi-card blue"><p>Total Booking</p><h3>{{.BookingsCount}}</h3><small>Update realtime</small></article>
     <article class="admin-kpi-card cyan"><p>Total Tamu</p><h3>{{.TotalGuests}}</h3><small>Sudah check-in</small></article>
     <article class="admin-kpi-card violet"><p>Total Hari Menginap</p><h3>{{.TotalNights}}</h3><small>Semua periode</small></article>
-    <article class="admin-kpi-card dark"><p>Booking Minggu Ini</p><h3>{{.ThisWeekBookings}}</h3><small>Tamu {{.ThisWeekGuests}} • Night {{.ThisWeekNights}}</small></article>
+    <article class="admin-kpi-card dark"><p>Booking Minggu Ini</p><h3>{{.ThisWeekBookings}}</h3><small>Reset otomatis tiap minggu • Tamu {{.ThisWeekGuests}} • Night {{.ThisWeekNights}}</small></article>
+    <article class="admin-kpi-card blue"><p>Booking Bulan Ini</p><h3>{{.MonthlyBookings}}</h3><small>Total Night bulan ini {{.ThisMonthNights}}</small></article>
   </section>
 
   <section class="admin-main-grid-v2">
     <article class="admin-panel-v2">
       <div class="panel-head"><h3>Operasional Booking</h3><span class="tag">Shift</span></div>
       <table class="admin-table">
-        <thead><tr><th>ID</th><th>Tanggal</th><th>Tamu</th><th>Durasi</th><th>Status</th></tr></thead>
+        <thead><tr><th>ID</th><th>Tanggal</th><th>Tamu</th><th>Durasi Awal</th><th>Sisa Durasi Hari Ini</th><th>Status</th></tr></thead>
         <tbody>
         {{range .RecentBookings}}
-        <tr><td>#{{.ID}}</td><td>{{.BookedAt}}</td><td>{{.Guests}} orang</td><td>{{.Nights}} hari</td><td>{{.Status}}</td></tr>
+        <tr><td>#{{.ID}}</td><td>{{.BookedAt}}</td><td>{{.Guests}} orang</td><td>{{.Nights}} hari</td><td>{{.RemainingNights}} hari</td><td>{{.Status}}</td></tr>
         {{end}}
         </tbody>
       </table>

@@ -29,7 +29,6 @@ func main() {
 	})
 	routes.AuthRoutes(mux, app)
 	routes.AdminRoutes(mux, app)
-	routes.StaffRoutes(mux, app)
 	routes.PaymentRoutes(mux, app)
 	mux.HandleFunc("/hotels", app.HotelsPage)
 	mux.HandleFunc("/hotel", app.HotelDetail)

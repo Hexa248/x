@@ -85,6 +85,41 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
   });
 
   let selectedEntry={label:'',type:'city'};
+  const homeDateChip=document.getElementById('homeDateChip');
+  const homeGuestChip=document.getElementById('homeGuestChip');
+  const homeInlinePopup=document.getElementById('home-inline-popup');
+  const homeInlinePopupTitle=document.getElementById('homeInlinePopupTitle');
+  const homeInlinePopupBody=document.getElementById('homeInlinePopupBody');
+  const homeInlineCancel=document.getElementById('homeInlineCancel');
+  const homeInlineApply=document.getElementById('homeInlineApply');
+
+  const homeState={
+    checkin:new Date(),
+    checkout:new Date(Date.now()+86400000),
+    adults:2,
+    rooms:1
+  };
+
+  const fmtDate=(d)=>d.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+  const refreshHomeChips=()=>{
+    if(homeDateChip) homeDateChip.textContent=`📅 ${fmtDate(homeState.checkin)} - ${fmtDate(homeState.checkout)}`;
+    if(homeGuestChip) homeGuestChip.textContent=`👥 ${homeState.adults} Dewasa, ${homeState.rooms} Kamar`;
+  };
+
+  const closeInlinePopup=()=>homeInlinePopup?.classList.add('hidden');
+
+  const openInlinePopup=(kind)=>{
+    if(!homeInlinePopup||!homeInlinePopupBody||!homeInlinePopupTitle) return;
+    homeInlinePopup.dataset.kind=kind;
+    if(kind==='date'){
+      homeInlinePopupTitle.textContent='Atur tanggal menginap';
+      homeInlinePopupBody.innerHTML=`<div class="row"><label>Check-in <input id="homeCheckin" type="date" value="${homeState.checkin.toISOString().slice(0,10)}"></label><label>Check-out <input id="homeCheckout" type="date" value="${homeState.checkout.toISOString().slice(0,10)}"></label></div>`;
+    }else{
+      homeInlinePopupTitle.textContent='Atur tamu & kamar';
+      homeInlinePopupBody.innerHTML=`<div class="row"><label>Dewasa <input id="homeAdults" type="number" min="1" value="${homeState.adults}"></label><label>Kamar <input id="homeRooms" type="number" min="1" value="${homeState.rooms}"></label></div>`;
+    }
+    homeInlinePopup.classList.remove('hidden');
+  };
 
   const applyHomeCardFilter=(term)=>{
     const keyword=(term||'').toLowerCase();
@@ -189,14 +224,47 @@ if(homeCityLauncher && homeSearchPopup && homeSearchInput && homeSearchSuggestio
   homeSearchBtn?.addEventListener('click',()=>{
     const keyword=(homeSearchInput.value || selectedEntry.label || '').trim();
     if(!keyword) return;
+    const query=`checkin=${encodeURIComponent(homeState.checkin.toISOString().slice(0,10))}&checkout=${encodeURIComponent(homeState.checkout.toISOString().slice(0,10))}&guests=${homeState.adults}&rooms=${homeState.rooms}`;
     const cityMatch=uniqueEntries.find(item=>item.type==='city' && item.label.toLowerCase()===keyword.toLowerCase());
     if(cityMatch){
-      window.location.href=`/hotels?city=${encodeURIComponent(cityMatch.label)}`;
+      window.location.href=`/hotels?city=${encodeURIComponent(cityMatch.label)}&${query}`;
       return;
     }
-    window.location.href=`/hotels?q=${encodeURIComponent(keyword)}`;
+    window.location.href=`/hotels?q=${encodeURIComponent(keyword)}&${query}`;
   });
 
+  homeDateChip?.addEventListener('click',()=>openInlinePopup('date'));
+  homeGuestChip?.addEventListener('click',()=>openInlinePopup('guest'));
+  homeInlineCancel?.addEventListener('click', closeInlinePopup);
+  homeInlineApply?.addEventListener('click',()=>{
+    const kind=homeInlinePopup?.dataset.kind;
+    if(kind==='date'){
+      const ci=document.getElementById('homeCheckin');
+      const co=document.getElementById('homeCheckout');
+      if(ci?.value) homeState.checkin=new Date(ci.value+'T00:00:00');
+      if(co?.value) homeState.checkout=new Date(co.value+'T00:00:00');
+      if(homeState.checkout <= homeState.checkin){
+        homeState.checkout=new Date(homeState.checkin.getTime()+86400000);
+      }
+    }
+    if(kind==='guest'){
+      const ad=document.getElementById('homeAdults');
+      const ro=document.getElementById('homeRooms');
+      homeState.adults=Math.max(1, Number(ad?.value||2));
+      homeState.rooms=Math.max(1, Number(ro?.value||1));
+    }
+    refreshHomeChips();
+    closeInlinePopup();
+  });
+
+  document.addEventListener('click',(e)=>{
+    if(!homeInlinePopup || homeInlinePopup.classList.contains('hidden')) return;
+    const t=e.target;
+    if(homeInlinePopup.contains(t) || homeDateChip?.contains(t) || homeGuestChip?.contains(t)) return;
+    closeInlinePopup();
+  });
+
+  refreshHomeChips();
   renderHomeSuggestions('');
 }
 
@@ -769,4 +837,38 @@ if(roomSearchInput){
   };
   roomSearchInput.addEventListener('input', applyRoomSearch);
   roomSearchBtn?.addEventListener('click', applyRoomSearch);
+}
+
+
+const bookingForms=[...document.querySelectorAll('form[action="/api/book"]')];
+if(bookingForms.length){
+  const toast=document.getElementById('bookingToast');
+  const showToast=(msg)=>{
+    if(!toast) return;
+    toast.textContent=msg;
+    toast.classList.remove('hidden');
+    setTimeout(()=>toast.classList.add('hidden'),2500);
+  };
+
+  bookingForms.forEach(form=>{
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd=new FormData(form);
+      try{
+        const res=await fetch('/api/book',{method:'POST', body:fd, headers:{'X-Requested-With':'XMLHttpRequest','Accept':'application/json'}});
+        let data={};
+        try{ data=await res.json(); }catch(_){ data={message: await res.text()}; }
+        if(!res.ok){
+          showToast(data.message || 'Gagal booking kamar');
+          return;
+        }
+        const row=form.closest('.room-row');
+        const stockEl=row?.querySelector('.left-stock');
+        if(stockEl){ stockEl.textContent=`Sisa ${data.stock_left} kamar!`; }
+        showToast(`${data.message} • ${data.room_name} (sisa ${data.stock_left})`);
+      }catch(err){
+        showToast('Booking gagal diproses');
+      }
+    });
+  });
 }
