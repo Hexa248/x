@@ -50,3 +50,7 @@ export MYSQL_DATABASE=hotel_booking
 ```
 
 When enabled, the app initializes tables (`hotels`, `rooms`, `bookings`) and syncs stock + booking changes automatically.
+
+## New microservices structure
+
+A new folder `hotel-booking-platform/` has been added as a microservices-oriented structure (API gateway + domain services + shared + clients + infrastructure + monitoring + docs).
